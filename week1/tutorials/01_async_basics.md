@@ -339,8 +339,9 @@ asyncio.run(main())
 
 掌握了基础概念后，继续学习：
 
-👉 [Asyncio实战指南](./02_asyncio_practical.md)
+👉 [Pydantic数据验证](./04_pydantic_basics.md)
 
 ---
 
 **记住：异步编程一开始会觉得奇怪，多写几次就熟悉了！💪**
+
