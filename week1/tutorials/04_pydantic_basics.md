@@ -470,12 +470,26 @@ print(order.model_dump_json(indent=2))
 
 ---
 
-## 8. 下一步
+## 📺 推荐B站视频
 
-掌握Pydantic后，我们将学习如何在FastAPI中使用它：
+| UP主 | 视频标题 | 链接 |
+|------|---------|------|
+| 刘悦的技术博客 | Pydantic V2 完全指南 | https://www.bilibili.com/video/BV1xh411Z7nY |
+| 黑马程序员 | Python类型注解与Pydantic | https://www.bilibili.com/video/BV1dv4y1F7jE |
 
-👉 [FastAPI快速入门](./05_fastapi_quickstart.md)
+---
+
+## 8. 继续学习
+
+学完Pydantic后，在左侧菜单选择下一个教程：
+
+📌 **推荐学习顺序**：
+1. ✅ 异步编程核心概念
+2. ✅ Pydantic数据验证（本教程）
+3. ➡️ FastAPI快速入门
+4. ➡️ Docker基础入门
 
 ---
 
 **Pydantic是FastAPI的核心依赖，掌握它至关重要！💪**
+

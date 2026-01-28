@@ -360,12 +360,25 @@ text = """
 
 ---
 
-## 8. 下一步
+## 📺 推荐B站视频
 
-掌握结构化输出后，继续学习：
+| UP主 | 视频标题 | 链接 |
+|------|---------|------|
+| AI进化论 | 大模型结构化输出实战 | https://www.bilibili.com/video/BV1dZ421m7tB |
+| DataWhale | JSON Mode与结构化输出 | https://www.bilibili.com/video/BV1Sp4y1s7Pt |
 
-👉 [Function Calling机制](./04_function_calling_intro.md)
+---
+
+## 8. 继续学习
+
+学完结构化输出后，在左侧菜单选择下一个教程：
+
+📌 **Week 2 学习顺序**：
+1. ✅ DeepSeek API快速入门
+2. ✅ 结构化输出详解（本教程）
+3. ➡️ Function Calling详解
 
 ---
 
 **结构化输出是AI应用的关键技术，让AI从"聊天"变成"做事"！💪**
+

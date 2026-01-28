@@ -118,4 +118,28 @@ services:
 
 ---
 
+## 📺 推荐B站视频
+
+| UP主 | 视频标题 | 链接 |
+|------|---------|------|
+| 狂神说Java | Docker最新超详细版教程（推荐⭐） | https://www.bilibili.com/video/BV1og4y1q7M4 |
+| 尚硅谷 | Docker入门到精通 | https://www.bilibili.com/video/BV1Ls411n7mx |
+
+---
+
+## 8. 继续学习
+
+🎉 **恭喜！你已完成Week 1基础课程！**
+
+📌 **Week 1 学习顺序**：
+1. ✅ 异步编程核心概念
+2. ✅ Pydantic数据验证
+3. ✅ FastAPI快速入门
+4. ✅ Docker基础入门（本教程）
+
+在左侧菜单选择 **Week 2** 的教程继续学习大模型API！
+
+---
+
 **Docker = 一次构建，到处运行！💪**
+

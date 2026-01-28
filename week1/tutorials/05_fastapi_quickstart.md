@@ -126,8 +126,26 @@ def multiply(a: float, b: float):
 
 ---
 
-## 5. 下一步
+## 📺 推荐B站视频
 
-👉 [Pydantic数据验证](./04_pydantic_basics.md)
+| UP主 | 视频标题 | 链接 |
+|------|---------|------|
+| 李辉Python | FastAPI从入门到精通 | https://www.bilibili.com/video/BV1R14y1Y7G8 |
+| 编程浪子 | FastAPI零基础教程 | https://www.bilibili.com/video/BV1Zu4y1f72U |
+
+---
+
+## 5. 继续学习
+
+学完FastAPI后，在左侧菜单选择下一个教程：
+
+📌 **推荐学习顺序**：
+1. ✅ 异步编程核心概念
+2. ✅ Pydantic数据验证
+3. ✅ FastAPI快速入门（本教程）
+4. ➡️ Docker基础入门
+
+---
 
 **FastAPI = Python + 类型注解 + 自动文档，就是这么简单！💪**
+

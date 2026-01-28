@@ -135,14 +135,27 @@ AI会根据用户问题**自动选择**合适的函数！
 
 ---
 
-## 5. 关键要点
+## 📺 推荐B站视频
 
-> [!IMPORTANT]
-> 1. **清晰的函数描述**：description越清楚，AI选择越准确
-> 2. **参数验证**：使用Pydantic验证函数参数
-> 3. **错误处理**：函数执行失败要优雅处理
-> 4. **安全性**：不要让AI调用危险操作（如删除文件）
+| UP主 | 视频标题 | 链接 |
+|------|---------|------|
+| 吴恩达AI | Function Calling详解 | https://www.bilibili.com/video/BV1es4y1G7Dy |
+| DataWhale | 大模型工具调用原理 | https://www.bilibili.com/video/BV1Yc41197Xz |
+
+---
+
+## 6. 继续学习
+
+🎉 **恭喜！你已完成Week 2基础课程！**
+
+📌 **Week 2 学习顺序**：
+1. ✅ DeepSeek API快速入门
+2. ✅ 结构化输出详解
+3. ✅ Function Calling详解（本教程）
+
+在左侧菜单选择 **Week 3** 的教程继续学习MCP协议！
 
 ---
 
 **Function Calling让AI拥有"手脚"，能够与真实世界交互！💪**
+
