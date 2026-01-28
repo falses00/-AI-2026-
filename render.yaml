@@ -1,0 +1,12 @@
+# Render.com 部署配置
+# 详见: https://render.com/docs/deploy-fastapi
+
+services:
+  - type: web
+    name: ai-engineer-bootcamp
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn webapp.app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
