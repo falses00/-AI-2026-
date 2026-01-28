@@ -36,7 +36,7 @@ pip install openai python-dotenv
 创建 `.env` 文件（已为您创建）：
 
 ```env
-DEEPSEEK_API_KEY=sk-981a097cf8bc4a0a8efff337d1b80051
+DEEPSEEK_API_KEY=你的API密钥（从.env文件读取）
 DEEPSEEK_BASE_URL=https://api.deepseek.com
 ```
 
@@ -54,7 +54,7 @@ from openai import OpenAI
 
 # 创建客户端（使用DeepSeek配置）
 client = OpenAI(
-    api_key="sk-981a097cf8bc4a0a8efff337d1b80051",
+    api_key="你的API密钥",  # 从.env文件获取，不要硬编码！
     base_url="https://api.deepseek.com"
 )
 

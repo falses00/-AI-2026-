@@ -1,6 +1,8 @@
-# 🚀 AI工程师速成训练营 - 第一阶段
+# 🚀 AI工程师2026速成训练营
 
-> **课程目标**: 掌握Python高级特性、FastAPI、Pydantic、Docker和MCP协议，为构建生产级AI应用打下坚实基础
+> **12周从"调API"到"智能体开发"** | 掌握MCP协议 · RAG系统 · Agentic Workflows
+>
+> ⭐ 字节跳动、百度、月之暗面都在用的技术栈
 
 ---
 
