@@ -54,7 +54,10 @@ CURRICULUM = {
         "tutorials": [
             {"name": "DeepSeek API快速入门", "path": "week2/tutorials/01_openai_api_basics.md", "icon": "🔌"},
             {"name": "结构化输出详解", "path": "week2/tutorials/02_structured_output.md", "icon": "📊"},
+            {"name": "Response Format深度解析", "path": "week2/tutorials/03_response_format.md", "icon": "📋"},
             {"name": "Function Calling详解", "path": "week2/tutorials/04_function_calling_intro.md", "icon": "🔧"},
+            {"name": "Streaming流式响应", "path": "week2/tutorials/05_streaming.md", "icon": "📡"},
+            {"name": "Token计算与成本优化", "path": "week2/tutorials/06_token_optimization.md", "icon": "💰"},
         ],
         "projects": [],
         "exercises": [
@@ -67,13 +70,61 @@ CURRICULUM = {
         "color": "#ec4899",
         "tutorials": [
             {"name": "MCP协议入门", "path": "week3/tutorials/01_mcp_introduction.md", "icon": "📖"},
+            {"name": "FastMCP基础教程", "path": "week3/tutorials/02_fastmcp_basics.md", "icon": "⚡"},
+            {"name": "MCP Tools开发指南", "path": "week3/tutorials/03_mcp_tools.md", "icon": "🔧"},
+            {"name": "MCP Resources开发指南", "path": "week3/tutorials/04_mcp_resources.md", "icon": "📦"},
+            {"name": "Claude Desktop集成", "path": "week3/tutorials/05_claude_integration.md", "icon": "🖥️"},
         ],
         "projects": [
             {"name": "MCP文件系统服务器", "path": "week3/projects/mcp_filesystem/mcp_server.py", "icon": "📁"},
         ],
         "exercises": []
+    },
+    "week4": {
+        "title": "RAG系统基础",
+        "icon": "🔍",
+        "color": "#10b981",
+        "tutorials": [
+            {"name": "Embedding向量化入门", "path": "week4/tutorials/01_embedding_basics.md", "icon": "🧮"},
+            {"name": "ChromaDB快速入门", "path": "week4/tutorials/02a_chromadb.md", "icon": "📊"},
+            {"name": "Milvus向量数据库", "path": "week4/tutorials/02b_milvus.md", "icon": "🗄️"},
+            {"name": "检索策略详解", "path": "week4/tutorials/03_retrieval_strategies.md", "icon": "🎯"},
+            {"name": "构建简单RAG系统", "path": "week4/tutorials/04_simple_rag.md", "icon": "🤖"},
+        ],
+        "projects": [],
+        "exercises": []
+    },
+    "week5": {
+        "title": "RAG系统进阶",
+        "icon": "⚡",
+        "color": "#f59e0b",
+        "tutorials": [
+            {"name": "混合检索原理与实现", "path": "week5/tutorials/01a_hybrid_search_native.md", "icon": "🔀"},
+            {"name": "LangChain混合检索", "path": "week5/tutorials/01b_hybrid_search_langchain.md", "icon": "🔗"},
+            {"name": "重排序模型详解", "path": "week5/tutorials/02_reranking.md", "icon": "📈"},
+            {"name": "上下文压缩技术", "path": "week5/tutorials/03_context_compression.md", "icon": "🗜️"},
+            {"name": "高级RAG Pipeline", "path": "week5/tutorials/04a_advanced_rag_native.md", "icon": "🚀"},
+        ],
+        "projects": [],
+        "exercises": []
+    },
+    "week6": {
+        "title": "智能体入门",
+        "icon": "🤖",
+        "color": "#ef4444",
+        "tutorials": [
+            {"name": "AI Agent入门", "path": "week6/tutorials/01_agent_basics.md", "icon": "🧠"},
+            {"name": "ReAct框架详解", "path": "week6/tutorials/02_react_framework.md", "icon": "💭"},
+            {"name": "原生工具调用实现", "path": "week6/tutorials/03a_tool_use_native.md", "icon": "🔧"},
+            {"name": "LangChain工具系统", "path": "week6/tutorials/03b_tool_use_langchain.md", "icon": "🔗"},
+            {"name": "多轮对话Agent", "path": "week6/tutorials/04_conversation_agent.md", "icon": "💬"},
+            {"name": "多Agent协作基础", "path": "week6/tutorials/05a_multi_agent_basic.md", "icon": "👥"},
+        ],
+        "projects": [],
+        "exercises": []
     }
 }
+
 
 
 def read_file_content(path: str) -> str:
