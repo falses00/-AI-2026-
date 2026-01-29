@@ -103,7 +103,7 @@ CURRICULUM = {
             {"name": "LangChain混合检索", "path": "week5/tutorials/01b_hybrid_search_langchain.md", "icon": "🔗"},
             {"name": "重排序模型详解", "path": "week5/tutorials/02_reranking.md", "icon": "📈"},
             {"name": "上下文压缩技术", "path": "week5/tutorials/03_context_compression.md", "icon": "🗜️"},
-            {"name": "高级RAG Pipeline", "path": "week5/tutorials/04a_advanced_rag_native.md", "icon": "🚀"},
+            {"name": "高级RAG Pipeline", "path": "week5/tutorials/04_advanced_rag_pipeline.md", "icon": "🚀"},
         ],
         "projects": [],
         "exercises": []
@@ -113,12 +113,11 @@ CURRICULUM = {
         "icon": "🤖",
         "color": "#ef4444",
         "tutorials": [
-            {"name": "AI Agent入门", "path": "week6/tutorials/01_agent_basics.md", "icon": "🧠"},
-            {"name": "ReAct框架详解", "path": "week6/tutorials/02_react_framework.md", "icon": "💭"},
-            {"name": "原生工具调用实现", "path": "week6/tutorials/03a_tool_use_native.md", "icon": "🔧"},
-            {"name": "LangChain工具系统", "path": "week6/tutorials/03b_tool_use_langchain.md", "icon": "🔗"},
-            {"name": "多轮对话Agent", "path": "week6/tutorials/04_conversation_agent.md", "icon": "💬"},
-            {"name": "多Agent协作基础", "path": "week6/tutorials/05a_multi_agent_basic.md", "icon": "👥"},
+            {"name": "AI Agent基础概念", "path": "week6/tutorials/01_agent_basics.md", "icon": "🧠"},
+            {"name": "ReAct原生实现", "path": "week6/tutorials/02a_react_native.md", "icon": "💭"},
+            {"name": "LangChain Agent", "path": "week6/tutorials/02b_react_langchain.md", "icon": "🔗"},
+            {"name": "工具开发详解", "path": "week6/tutorials/03_tool_development.md", "icon": "🔧"},
+            {"name": "多Agent系统", "path": "week6/tutorials/04_multi_agent.md", "icon": "👥"},
         ],
         "projects": [],
         "exercises": []
