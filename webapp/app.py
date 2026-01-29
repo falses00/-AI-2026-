@@ -91,8 +91,12 @@ CURRICULUM = {
             {"name": "检索策略详解", "path": "week4/tutorials/03_retrieval_strategies.md", "icon": "🎯"},
             {"name": "构建简单RAG系统", "path": "week4/tutorials/04_simple_rag.md", "icon": "🤖"},
         ],
-        "projects": [],
-        "exercises": []
+        "projects": [
+            {"name": "智能文档问答系统", "path": "week4/projects/project_doc_qa/README.md", "icon": "📚"},
+        ],
+        "exercises": [
+            {"name": "RAG基础练习", "path": "week4/exercises/rag_exercises.py", "icon": "💻"},
+        ]
     },
     "week5": {
         "title": "RAG系统进阶",
@@ -105,8 +109,12 @@ CURRICULUM = {
             {"name": "上下文压缩技术", "path": "week5/tutorials/03_context_compression.md", "icon": "🗜️"},
             {"name": "高级RAG Pipeline", "path": "week5/tutorials/04_advanced_rag_pipeline.md", "icon": "🚀"},
         ],
-        "projects": [],
-        "exercises": []
+        "projects": [
+            {"name": "智能客服系统", "path": "week5/projects/project_smart_cs/README.md", "icon": "🎧"},
+        ],
+        "exercises": [
+            {"name": "高级RAG练习", "path": "week5/exercises/advanced_rag_exercises.py", "icon": "💻"},
+        ]
     },
     "week6": {
         "title": "智能体入门",
@@ -119,8 +127,12 @@ CURRICULUM = {
             {"name": "工具开发详解", "path": "week6/tutorials/03_tool_development.md", "icon": "🔧"},
             {"name": "多Agent系统", "path": "week6/tutorials/04_multi_agent.md", "icon": "👥"},
         ],
-        "projects": [],
-        "exercises": []
+        "projects": [
+            {"name": "智能工作流Agent", "path": "week6/projects/project_workflow_agent/README.md", "icon": "🔄"},
+        ],
+        "exercises": [
+            {"name": "Agent开发练习", "path": "week6/exercises/agent_exercises.py", "icon": "💻"},
+        ]
     }
 }
 
