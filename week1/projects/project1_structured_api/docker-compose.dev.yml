@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # ============================================
+  # FastAPI 应用（开发模式）
+  # ============================================
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev # 使用开发版 Dockerfile
+    container_name: bookstore-dev
+    ports:
+      - "8000:8000"
+    volumes:
+      # 挂载整个项目目录（实时代码修改）
+      - .:/app
+      # 排除 Python 缓存文件
+      - /app/__pycache__
+      - /app/.pytest_cache
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DEBUG=True
+      - RELOAD=True
+    restart: unless-stopped
+    networks:
+      - dev-network
+    # 开发环境健康检查（更宽松）
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/api" ]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+networks:
+  dev-network:
+    driver: bridge
