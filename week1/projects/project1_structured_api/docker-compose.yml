@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  bookstore-api:
+    build: .
+    container_name: bookstore-api
+    ports:
+      - "8000:8000"
+    volumes:
+      # 将数据库文件挂载到本地，确保数据持久化
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3

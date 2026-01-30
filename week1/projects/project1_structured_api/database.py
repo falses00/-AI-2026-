@@ -1,92 +1,193 @@
-"""
-项目1：图书管理API - 数据库模拟
+r"""
+图书管理系统 - 数据库层
 
-使用内存字典模拟数据库操作
+使用SQLite数据库存储图书数据
 """
 
-from typing import Dict, Optional
+import sqlite3
+import json
+from datetime import datetime
+from pathlib import Path
+from typing import Optional, List, Tuple
 from models import BookCreate, BookUpdate
-from datetime import date
 
-# 模拟数据库（使用内存字典）
-books_db: Dict[int, dict] = {}
-next_id = 1
+# 数据库文件路径（存储在data目录）
+DB_DIR = Path(__file__).parent / "data"
+DB_DIR.mkdir(exist_ok=True)
+DB_FILE = DB_DIR / "bookstore.db"
+
+
+def get_connection():
+    """获取数据库连接"""
+    conn = sqlite3.connect(DB_FILE)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+
+def init_db():
+    """初始化数据库"""
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    # 创建图书表
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS books (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            author TEXT NOT NULL,
+            isbn TEXT NOT NULL UNIQUE,
+            price REAL NOT NULL,
+            published_date TEXT NOT NULL,
+            description TEXT,
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL
+        )
+    """)
+    
+    conn.commit()
+    conn.close()
 
 
 def create_book(book: BookCreate) -> dict:
     """创建图书"""
-    global next_id
-    book_dict = book.model_dump()
-    book_dict["id"] = next_id
-    books_db[next_id] = book_dict
-    next_id += 1
-    return book_dict
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    now = datetime.now().isoformat()
+    
+    cursor.execute("""
+        INSERT INTO books (title, author, isbn, price, published_date, description, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        book.title,
+        book.author,
+        book.isbn,
+        book.price,
+        book.published_date.isoformat(),
+        book.description,
+        now,
+        now
+    ))
+    
+    book_id = cursor.lastrowid
+    conn.commit()
+    
+    # 获取新创建的图书
+    cursor.execute("SELECT * FROM books WHERE id = ?", (book_id,))
+    row = cursor.fetchone()
+    conn.close()
+    
+    return dict(row)
+
+
+def get_books(skip: int = 0, limit: int = 10) -> Tuple[List[dict], int]:
+    """获取图书列表（分页）"""
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    # 获取总数
+    cursor.execute("SELECT COUNT(*) FROM books")
+    total = cursor.fetchone()[0]
+    
+    # 获取分页数据
+    cursor.execute("""
+        SELECT * FROM books
+        ORDER BY created_at DESC
+        LIMIT ? OFFSET ?
+    """, (limit, skip))
+    
+    books = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    
+    return books, total
 
 
 def get_book(book_id: int) -> Optional[dict]:
-    """获取图书"""
-    return books_db.get(book_id)
-
-
-def get_books(skip: int = 0, limit: int = 10) -> tuple[list[dict], int]:
-    """获取图书列表"""
-    all_books = list(books_db.values())
-    total = len(all_books)
-    books = all_books[skip:skip + limit]
-    return books, total
+    """获取单本图书"""
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT * FROM books WHERE id = ?", (book_id,))
+    row = cursor.fetchone()
+    conn.close()
+    
+    return dict(row) if row else None
 
 
 def update_book(book_id: int, book_update: BookUpdate) -> Optional[dict]:
     """更新图书"""
-    if book_id not in books_db:
+    conn = get_connection()
+    cursor = conn.cursor()
+    
+    # 检查图书是否存在
+    cursor.execute("SELECT * FROM books WHERE id = ?", (book_id,))
+    if not cursor.fetchone():
+        conn.close()
         return None
     
-    # 只更新提供的字段
-    update_data = book_update.model_dump(exclude_unset=True)
-    books_db[book_id].update(update_data)
-    return books_db[book_id]
+    # 构建更新语句
+    update_fields = []
+    values = []
+    
+    if book_update.title is not None:
+        update_fields.append("title = ?")
+        values.append(book_update.title)
+    
+    if book_update.author is not None:
+        update_fields.append("author = ?")
+        values.append(book_update.author)
+    
+    if book_update.isbn is not None:
+        update_fields.append("isbn = ?")
+        values.append(book_update.isbn)
+    
+    if book_update.price is not None:
+        update_fields.append("price = ?")
+        values.append(book_update.price)
+    
+    if book_update.published_date is not None:
+        update_fields.append("published_date = ?")
+        values.append(book_update.published_date.isoformat())
+    
+    if book_update.description is not None:
+        update_fields.append("description = ?")
+        values.append(book_update.description)
+    
+    # 更新时间
+    update_fields.append("updated_at = ?")
+    values.append(datetime.now().isoformat())
+    
+    values.append(book_id)
+    
+    cursor.execute(f"""
+        UPDATE books
+        SET {", ".join(update_fields)}
+        WHERE id = ?
+    """, values)
+    
+    conn.commit()
+    
+    # 获取更新后的图书
+    cursor.execute("SELECT * FROM books WHERE id = ?", (book_id,))
+    row = cursor.fetchone()
+    conn.close()
+    
+    return dict(row)
 
 
 def delete_book(book_id: int) -> bool:
     """删除图书"""
-    if book_id in books_db:
-        del books_db[book_id]
-        return True
-    return False
-
-
-def init_sample_data():
-    """初始化示例数据"""
-    sample_books = [
-        BookCreate(
-            title="Python编程：从入门到实践",
-            author="埃里克·马瑟斯",
-            isbn="9787115428028",
-            price=89.00,
-            published_date=date(2016, 7, 1),
-            description="一本针对初学者的Python编程书"
-        ),
-        BookCreate(
-            title="深度学习",
-            author="伊恩·古德费洛",
-            isbn="9787115461476",
-            price=168.00,
-            published_date=date(2017, 8, 1),
-            description="深度学习领域的经典教材"
-        ),
-        BookCreate(
-            title="FastAPI入门与实战",
-            author="张三",
-            isbn="9787115500000",
-            price=79.00,
-            published_date=date(2024, 1, 1),
-            description="FastAPI框架实战指南"
-        )
-    ]
+    conn = get_connection()
+    cursor = conn.cursor()
     
-    for book in sample_books:
-        create_book(book)
+    cursor.execute("DELETE FROM books WHERE id = ?", (book_id,))
+    deleted = cursor.rowcount > 0
+    
+    conn.commit()
+    conn.close()
+    
+    return deleted
 
 
-# 初始化示例数据
-init_sample_data()
+# 应用启动时初始化数据库
+init_db()
