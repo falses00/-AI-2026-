@@ -1,18 +1,14 @@
 r"""
-项目1：图书管理API - 主应用
+图书管理系统 - 主应用（生产环境配置）
 
-运行方式：
-    cd i:\Study FastAPI\week1\projects\project1_structured_api
-    python -m uvicorn main:app --reload
-
-访问文档：
-    http://localhost:8000/docs
-    http://localhost:8000  (前端界面)
+生产环境运行：
+    gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
 """
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from pathlib import Path
 from models import (
     BookCreate, 
@@ -22,6 +18,7 @@ from models import (
     MessageResponse
 )
 import database as db
+import os
 
 # 创建FastAPI应用
 app = FastAPI(
@@ -43,13 +40,33 @@ app = FastAPI(
 * Pydantic
 * SQLite
 * Python 3.12
+* Nginx (反向代理)
     """,
     version="1.0.0",
     contact={
         "name": "AI工程师训练营",
         "email": "study@example.com"
-    }
+    },
+    # 生产环境建议禁用 docs 或设置访问控制
+    docs_url="/docs" if os.getenv("DEBUG") else None,
+    redoc_url="/redoc" if os.getenv("DEBUG") else None,
 )
+
+# ============================================
+# 中间件配置
+# ============================================
+
+# CORS 中间件（如果前端单独部署）
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # 生产环境应该指定具体域名
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Gzip 压缩中间件
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 
 @app.get("/", response_class=HTMLResponse, tags=["前端"])
@@ -85,6 +102,14 @@ def read_root():
         }
         .header h1 { font-size: 2.5em; margin-bottom: 10px; }
         .header p { opacity: 0.9; }
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.9em;
+        }
         
         .card {
             background: white;
@@ -213,8 +238,13 @@ def read_root():
     <div class="container">
         <div class="header">
             <h1>📚 图书管理系统</h1>
-            <p>FastAPI + SQLite 示例项目</p>
-            <p><a href="/docs" style="color: white; text-decoration: none;">📖 查看API文档</a></p>
+            <p>FastAPI + SQLite + Nginx 生产环境示例</p>
+            <div>
+                <span class="badge">🐳 Docker</span>
+                <span class="badge">🚀 FastAPI</span>
+                <span class="badge">⚡ Nginx</span>
+            </div>
+            <p style="margin-top: 10px;"><a href="/docs" style="color: white; text-decoration: none;">📖 查看API文档</a></p>
         </div>
         
         <div id="statusMessage" class="status-message"></div>
@@ -390,28 +420,13 @@ def read_root():
 
 @app.get("/api", response_model=MessageResponse, tags=["根路径"])
 def api_root():
-    """
-    API根路径
-    
-    返回API欢迎信息
-    """
-    return {"message": "欢迎使用图书管理API！访问 /docs 查看交互式文档"}
+    """API根路径 - 健康检查"""
+    return {"message": "API is running"}
 
 
 @app.post("/books/", response_model=BookResponse, status_code=201, tags=["图书管理"])
 def create_book(book: BookCreate):
-    """
-    创建新图书
-    
-    添加一本新书到系统中。
-    
-    - **title**: 书名（必填，1-200字符）
-    - **author**: 作者（必填，1-100字符）
-    - **isbn**: ISBN号（必填，13位数字）
-    - **price**: 价格（必填，必须大于0）
-    - **published_date**: 出版日期（必填，格式：YYYY-MM-DD）
-    - **description**: 描述（可选，最多1000字符）
-    """
+    """创建新图书"""
     new_book = db.create_book(book)
     return BookResponse(**new_book)
 
@@ -421,14 +436,7 @@ def get_books(
     page: int = Query(1, ge=1, description="页码，从1开始"),
     page_size: int = Query(10, ge=1, le=100, description="每页数量，最多100")
 ):
-    """
-    获取图书列表（分页）
-    
-    返回图书列表，支持分页查询。
-    
-    - **page**: 页码（默认1）
-    - **page_size**: 每页数量（默认10，最大100）
-    """
+    """获取图书列表（分页）"""
     skip = (page - 1) * page_size
     books, total = db.get_books(skip=skip, limit=page_size)
     
@@ -442,15 +450,7 @@ def get_books(
 
 @app.get("/books/{book_id}", response_model=BookResponse, tags=["图书管理"])
 def get_book(book_id: int):
-    """
-    获取单本图书详情
-    
-    根据图书ID获取详细信息。
-    
-    - **book_id**: 图书ID（路径参数）
-    
-    如果图书不存在，返回404错误。
-    """
+    """获取单本图书详情"""
     book = db.get_book(book_id)
     if book is None:
         raise HTTPException(
@@ -462,16 +462,7 @@ def get_book(book_id: int):
 
 @app.put("/books/{book_id}", response_model=BookResponse, tags=["图书管理"])
 def update_book(book_id: int, book_update: BookUpdate):
-    """
-    更新图书信息
-    
-    更新指定图书的信息，只需提供需要更新的字段。
-    
-    - **book_id**: 图书ID（路径参数）
-    - 其他字段：要更新的字段（只需提供需要更新的字段）
-    
-    如果图书不存在，返回404错误。
-    """
+    """更新图书信息"""
     updated_book = db.update_book(book_id, book_update)
     if updated_book is None:
         raise HTTPException(
@@ -483,15 +474,7 @@ def update_book(book_id: int, book_update: BookUpdate):
 
 @app.delete("/books/{book_id}", response_model=MessageResponse, tags=["图书管理"])
 def delete_book(book_id: int):
-    """
-    删除图书
-    
-    从系统中删除指定的图书。
-    
-    - **book_id**: 图书ID（路径参数）
-    
-    如果图书不存在，返回404错误。
-    """
+    """删除图书"""
     success = db.delete_book(book_id)
     if not success:
         raise HTTPException(

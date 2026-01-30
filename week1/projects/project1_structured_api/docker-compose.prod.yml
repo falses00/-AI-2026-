@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  # ============================================
+  # FastAPI 应用服务
+  # ============================================
+  api:
+    build: .
+    container_name: bookstore-api
+    # 不直接暴露端口，通过 Nginx 访问
+    expose:
+      - "8000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+      - WORKERS=4 # Gunicorn worker 数量
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/api" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - app-network
+
+  # ============================================
+  # Nginx 反向代理
+  # ============================================
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: bookstore-nginx
+    ports:
+      - "80:80" # HTTP
+      - "443:443" # HTTPS（可选）
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/logs:/var/log/nginx
+      - ./static:/usr/share/nginx/html/static:ro # 静态文件
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - app-network
+  # ============================================
+  # PostgreSQL 数据库（可选升级方案）
+  # ============================================
+  # 如果想使用 PostgreSQL 替代 SQLite，取消下面的注释
+  # db:
+  #   image: postgres:15-alpine
+  #   container_name: bookstore-db
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_USER: bookstore
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD:-your_secure_password}
+  #     POSTGRES_DB: bookstore
+  #   expose:
+  #     - "5432"
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U bookstore"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - app-network
+
+  # ============================================
+  # Redis 缓存（可选升级方案）
+  # ============================================
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: bookstore-redis
+  #   volumes:
+  #     - redis-data:/data
+  #   expose:
+  #     - "6379"
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - app-network
+
+  # ============================================
+  # 数据卷定义
+  # ============================================
+volumes:
+  # postgres-data:  # PostgreSQL 数据
+  # redis-data:     # Redis 数据
+  nginx-logs:
+    # Nginx 日志
+
+    # ============================================
+    # 网络定义
+    # ============================================
+networks:
+  app-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
