@@ -215,7 +215,41 @@ print(answer)
 
 ---
 
-### Day 6-7：实战项目
+### Day 6：检索增强技术 【🆕 新增】
+
+#### 📖 教程材料
+- [查询变换技术 - HyDE与Multi-Query](./tutorials/05_query_transformation.md) ✅
+- [父文档检索器](./tutorials/06_parent_document_retriever.md) ✅
+
+**学习内容**：
+- Multi-Query：多查询扩展提高召回率
+- HyDE：假设文档嵌入技术
+- Step-Back Prompting：后退提示
+- Parent Document Retriever：小块检索大块返回
+
+#### 💻 Multi-Query示例
+```python
+class MultiQueryRetriever:
+    """多查询检索器"""
+    
+    async def generate_queries(self, query: str) -> list[str]:
+        """生成多个相关查询"""
+        # "FastAPI怎么限流" -> [
+        #     "FastAPI rate limiting 实现",
+        #     "FastAPI 请求频率限制",
+        #     "slowapi 使用教程"
+        # ]
+        ...
+    
+    async def retrieve(self, query: str) -> list[dict]:
+        queries = await self.generate_queries(query)
+        # 分别检索并合并去重
+        ...
+```
+
+---
+
+### Day 7：实战项目
 
 #### 🚀 项目：个人知识库问答系统
 

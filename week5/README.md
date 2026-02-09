@@ -225,7 +225,42 @@ compressed = await compress_context(
 
 ---
 
-### Day 5-7：实战项目
+### Day 5-6：2025-2026最新RAG技术 【🆕 新增】
+
+#### 📖 教程材料
+- [Corrective RAG与Self-Reflective RAG](./tutorials/05_corrective_rag.md) ✅
+- [GraphRAG - 知识图谱增强检索](./tutorials/06_graphrag.md) ✅
+- [Agentic RAG - Agent驱动的智能检索](./tutorials/07_agentic_rag.md) ✅
+
+**核心技术**：
+
+| 技术 | 解决的问题 | 核心思想 |
+|------|-----------|----------|
+| CRAG | 检索质量不可靠 | 评估→修正→重试 |
+| Self-RAG | 回答可能有幻觉 | 生成→反思→迭代 |
+| GraphRAG | 多跳推理困难 | 知识图谱+向量检索 |
+| Agentic RAG | 固定Pipeline不灵活 | Agent自主决策检索 |
+
+#### 💻 Agentic RAG示例
+```python
+class AgenticRAGAgent:
+    """Agent自主决定何时检索、检索什么"""
+    
+    async def query(self, question: str):
+        # Agent思考：需要检索吗？检索哪个知识库？
+        # Agent可能调用：vector_search, graph_query, web_search
+        # Agent评估：结果够用吗？需要重试吗？
+        # 最终给出高质量回答
+        ...
+```
+
+> [!TIP]
+> **Agentic RAG是进入Week6 Agent的重要铺垫！**
+> 它引入了Agent的核心概念：工具调用、自主决策、思考-行动-观察循环。
+
+---
+
+### Day 7：实战项目
 
 #### 🚀 项目：企业文档智能检索系统
 
@@ -286,6 +321,12 @@ compressed = await compress_context(
 完成本周学习后，继续前往：
 
 👉 [Week 6: 智能体入门](../week6/README.md)
+
+> [!IMPORTANT]
+> **Week5→Week6 过渡提示**
+>
+> 你在本周学到的 **Agentic RAG** 中的工具调用和自主决策机制，
+> 正是Week6 Agent系统的核心能力！继续前进，探索更强大的智能体世界。
 
 ---
 

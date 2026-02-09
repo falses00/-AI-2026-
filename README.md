@@ -6,60 +6,160 @@
 
 ---
 
-## 📋 学习路线概览
+## 🌟 课程亮点
 
-### **第一阶段：工程基石与AI工程思维（第1-3周）**
-
-#### 第1周：Python高级特性 + AI工程环境
-- ✅ **核心知识**：
-  - Python异步编程（`asyncio`、`aiohttp`）
-  - Pydantic类型验证与数据建模
-  - FastAPI Web框架基础
-  - Docker容器化部署
-
-- 🎯 **实战项目**：
-  1. 搭建FastAPI服务实现结构化输出
-  2. 使用Docker部署本地API服务
-
-#### 第2周：大模型API深度控制
-- ✅ **核心知识**：
-  - OpenAI API、DeepSeek API的结构化输出
-  - Function Calling机制
-  - Token计算与成本优化
-  - Streaming响应处理
-
-- 🎯 **实战项目**：
-  3. 开发智能文档解析工具（结构化输出）
-  4. 实现流式响应的前端展示
-
-#### 第3周：MCP协议深度剖析
-- ✅ **核心知识**：
-  - JSON-RPC 2.0通信协议
-  - MCP的三大核心概念：Tool、Resource、Prompt
-  - 使用FastMCP SDK构建MCP Server
-
-- 🎯 **实战项目**：
-  5. 开发MCP文件系统服务器
-  6. 与Claude Desktop集成测试
+| 特点 | 描述 |
+|------|------|
+| 🎯 **项目驱动** | 每周2个实战项目，边学边做 |
+| 🔥 **技术前沿** | 2026年最新AI工程技术栈 |
+| 📊 **循序渐进** | 从基础到高级，步步深入 |
+| 💡 **双路线** | 原生实现 + 框架实现可选 |
 
 ---
 
-## 📚 学习方法
+## 📋 完整学习路线（12周）
 
-### 1️⃣ **项目驱动式学习（Project-Based Learning）**
-- 每周完成2个实战项目
-- 先理解概念，立即应用到项目中
-- 通过迭代式开发加深理解
+### 🔹 第一阶段：工程基石（第1-3周）
 
-### 2️⃣ **递进式难度设计**
-- 从简单项目开始，逐步增加复杂度
-- 每个项目都是下一个项目的基础
-- 最终能够独立构建完整的AI应用
+#### 📘 [第1周：Python高级特性 + AI工程环境](./week1/README.md)
+- Python异步编程（`asyncio`、`aiohttp`）
+- Pydantic类型验证与数据建模
+- FastAPI Web框架基础
+- Docker容器化部署
 
-### 3️⃣ **实践优先，理论辅助**
-- 70%时间用于编码实践
-- 30%时间用于理论学习和总结
-- 通过做中学（Learning by Doing）
+**🎯 项目**：搭建FastAPI服务实现结构化输出
+
+---
+
+#### 📘 [第2周：大模型API深度控制](./week2/README.md)
+- OpenAI API、DeepSeek API的结构化输出
+- Function Calling机制
+- Token计算与成本优化
+- Streaming响应处理
+
+**🎯 项目**：开发智能文档解析工具
+
+---
+
+#### 📘 [第3周：MCP协议深度剖析](./week3/README.md)
+- JSON-RPC 2.0通信协议
+- MCP的三大核心概念：Tool、Resource、Prompt
+- 使用FastMCP SDK构建MCP Server
+
+**🎯 项目**：开发MCP文件系统服务器
+
+---
+
+### 🔹 第二阶段：RAG系统（第4-5周）
+
+#### 📘 [第4周：RAG系统基础](./week4/README.md)
+- Embedding向量化技术
+- 向量数据库（ChromaDB / Milvus）
+- 语义检索实现
+- 简单RAG Pipeline
+
+**🎯 项目**：构建个人知识库问答系统
+
+---
+
+#### 📘 [第5周：RAG系统进阶](./week5/README.md)
+- 混合检索（语义+关键词）
+- 重排序模型（Reranker）
+- 上下文压缩技术
+- 高级RAG架构
+
+**🎯 项目**：企业级文档检索系统
+
+---
+
+### 🔹 第三阶段：智能体开发（第6周）
+
+#### 📘 [第6周：智能体入门](./week6/README.md)
+- AI Agent核心概念
+- ReAct框架（推理+行动）
+- 工具使用（Tool Use）
+- 多Agent协作
+
+**🎯 项目**：自动化工作流Agent
+
+---
+
+### 🔹 第四阶段：进阶技能（第7-9周）
+
+#### 📘 [第7周：项目实战 - 企业级RAG应用](./week7/README.md)
+- 企业级系统架构设计
+- 多格式文档处理（PDF、Word、网页）
+- 用户认证与权限管理
+- 云平台部署
+
+**🎯 项目**：企业知识库系统
+
+---
+
+#### 📘 [第8周：多模态AI应用](./week8/README.md)
+- Vision模型（GPT-4V/DeepSeek Vision）
+- 图像Embedding与CLIP
+- 语音处理（Whisper）
+- 多模态RAG
+
+**🎯 项目**：智能图文问答系统
+
+---
+
+#### 📘 [第9周：模型微调与优化](./week9/README.md)
+- LoRA/QLoRA微调技术
+- 训练数据准备
+- 模型评估与部署
+- 成本效益分析
+
+**🎯 项目**：行业专属问答模型
+
+---
+
+### 🔹 第五阶段：产品化（第10-11周）
+
+#### 📘 [第10周：AI产品设计与用户体验](./week10/README.md)
+- AI产品设计原则
+- 对话交互设计
+- 错误处理策略
+- A/B测试方法
+
+**🎯 项目**：优化AI应用用户体验
+
+---
+
+#### 📘 [第11周：高级Agent系统](./week11/README.md)
+- 生产级Agent架构
+- Agent记忆系统
+- 多Agent协作模式
+- 监控与调试
+
+**🎯 项目**：多Agent内容生产系统
+
+---
+
+### 🔹 第六阶段：毕业项目（第12周）
+
+#### 🎓 [第12周：毕业项目](./week12/README.md)
+- 综合运用全部技能
+- 独立完成完整AI产品
+- 项目答辩与展示
+
+**🎯 项目选择**：
+- 🅰️ 企业AI助手平台
+- 🅱️ 智能内容创作平台  
+- 🅲️ 个人AI工作台
+
+---
+
+## 📊 技能成长路径
+
+```
+Week 1-3:  基础能力 ████████░░░░░░░░░░░░ 25%
+Week 4-6:  核心能力 ████████████░░░░░░░░ 50%
+Week 7-9:  进阶能力 ████████████████░░░░ 75%
+Week 10-12: 专家能力 ████████████████████ 100%
+```
 
 ---
 
@@ -68,22 +168,23 @@
 ```
 Study FastAPI/
 ├── README.md                 # 本文件
-├── week1/                    # 第1周学习材料
-│   ├── tutorials/           # 教程文档
-│   ├── projects/            # 实战项目
-│   └── exercises/           # 练习题
-├── week2/                    # 第2周学习材料
-│   ├── tutorials/
-│   ├── projects/
-│   └── exercises/
-├── week3/                    # 第3周学习材料
-│   ├── tutorials/
-│   ├── projects/
-│   └── exercises/
+├── week1/                    # 第1周：Python高级 + 环境
+├── week2/                    # 第2周：大模型API
+├── week3/                    # 第3周：MCP协议
+├── week4/                    # 第4周：RAG基础
+├── week5/                    # 第5周：RAG进阶
+├── week6/                    # 第6周：智能体入门
+├── week7/                    # 第7周：企业级RAG
+├── week8/                    # 第8周：多模态AI
+├── week9/                    # 第9周：模型微调
+├── week10/                   # 第10周：AI产品设计
+├── week11/                   # 第11周：高级Agent
+├── week12/                   # 第12周：毕业项目
+├── webapp/                   # 学习Web界面
+│   ├── app.py               # FastAPI应用
+│   └── agents.py            # 多Agent系统
 ├── resources/                # 学习资源
-│   ├── cheatsheets/         # 速查表
-│   └── references/          # 参考资料
-└── solutions/                # 项目参考答案（学完再看！）
+└── guides/                   # 使用指南
 ```
 
 ---
@@ -101,7 +202,7 @@ Study FastAPI/
   - 至少8GB内存（推荐16GB）
   - 20GB可用磁盘空间
 - [ ] **账号准备**：
-  - GitHub账号（用于代码管理）
+  - GitHub账号
   - OpenAI API密钥（或DeepSeek API密钥）
 
 ---
@@ -134,6 +235,28 @@ Study FastAPI/
 
 ---
 
+## 🖥️ 启动学习界面
+
+```bash
+# 进入项目目录
+cd "I:\Study FastAPI"
+
+# 安装依赖
+pip install fastapi uvicorn
+
+# 启动Web界面
+python -m uvicorn webapp.app:app --reload --port 8080
+
+# 访问 http://localhost:8080
+```
+
+或者直接运行批处理文件：
+```bash
+启动本地服务器.bat
+```
+
+---
+
 ## 🔗 快速开始
 
 准备好了吗？让我们从第1周开始！
@@ -154,3 +277,9 @@ Study FastAPI/
 ---
 
 **祝你学习愉快！记住：编程是一门手艺，熟能生巧！💪**
+
+---
+
+<p align="center">
+  <b>🌟 如果觉得有帮助，请给个Star支持一下！🌟</b>
+</p>

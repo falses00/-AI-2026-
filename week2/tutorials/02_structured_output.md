@@ -1,6 +1,6 @@
-# 📊 结构化输出详解
+# 📊 结构化输出详解 (2026更新版)
 
-> **学习目标**：掌握如何让AI返回结构化的JSON数据，实现程序可读的输出
+> **学习目标**：掌握最新的结构化输出技术，让AI返回可靠的JSON数据
 
 ---
 
@@ -9,7 +9,7 @@
 ### 传统对话的问题
 
 ```python
-response = chat_completion("分析这段文本的情感：我今天很开心！")
+response = chat("分析这段文本的情感：我今天很开心！")
 # 输出: "这段文本表达了积极、正面的情感。作者使用了'很开心'这个词..."
 ```
 
@@ -21,7 +21,7 @@ response = chat_completion("分析这段文本的情感：我今天很开心！"
 ### 结构化输出的优势
 
 ```python
-response = chat_completion_structured("分析这段文本的情感：我今天很开心！")
+response = chat_structured("分析这段文本的情感：我今天很开心！")
 # 输出: {"sentiment": "positive", "score": 0.95, "keywords": ["开心"]}
 ```
 
@@ -32,353 +32,362 @@ response = chat_completion_structured("分析这段文本的情感：我今天�
 
 ---
 
-## 2. JSON Mode基础
+## 2. 三种结构化输出方式
 
-### 2.1 启用JSON模式
+### 方式对比
+
+| 方式 | 可靠性 | 推荐度 | 适用场景 |
+|------|--------|--------|----------|
+| JSON Mode | 中 | ⭐⭐ | 简单场景 |
+| JSON Schema (strict) | 高 | ⭐⭐⭐⭐⭐ | **推荐！生产环境** |
+| Function Calling | 高 | ⭐⭐⭐⭐ | 工具调用场景 |
+
+---
+
+## 3. 🆕 JSON Schema (最新推荐方式)
+
+> [!IMPORTANT]
+> **2024年8月起，OpenAI/DeepSeek支持严格JSON Schema验证！**
+> 使用 `strict: true` 确保100%遵循你定义的Schema。
+
+### 3.1 基础示例
 
 ```python
-from config.deepseek_client import get_client
+from openai import OpenAI
 import json
 
-client = get_client()
+client = OpenAI(
+    api_key="your-api-key",
+    base_url="https://api.deepseek.com/v1"  # 或 OpenAI
+)
 
+response = client.chat.completions.create(
+    model="deepseek-chat",  # 或 gpt-4o-2024-08-06
+    messages=[
+        {"role": "system", "content": "你是一个情感分析助手。"},
+        {"role": "user", "content": "分析这段文本的情感：我今天很开心！"}
+    ],
+    response_format={
+        "type": "json_schema",
+        "json_schema": {
+            "name": "sentiment_analysis",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "sentiment": {
+                        "type": "string",
+                        "enum": ["positive", "negative", "neutral"],
+                        "description": "情感倾向"
+                    },
+                    "score": {
+                        "type": "number",
+                        "description": "置信度分数 0-1"
+                    },
+                    "keywords": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "关键情感词"
+                    }
+                },
+                "required": ["sentiment", "score", "keywords"],
+                "additionalProperties": False
+            },
+            "strict": True  # 🔒 严格模式：确保完全遵循Schema
+        }
+    }
+)
+
+result = json.loads(response.choices[0].message.content)
+print(result)
+# {"sentiment": "positive", "score": 0.95, "keywords": ["开心"]}
+```
+
+### 3.2 复杂嵌套结构
+
+```python
+# 定义嵌套的JSON Schema
+complex_schema = {
+    "type": "json_schema",
+    "json_schema": {
+        "name": "product_extraction",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "name": {"type": "string"},
+                "price": {
+                    "type": "object",
+                    "properties": {
+                        "original": {"type": "number"},
+                        "current": {"type": "number"},
+                        "currency": {"type": "string"}
+                    },
+                    "required": ["current", "currency"],
+                    "additionalProperties": False
+                },
+                "specifications": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {"type": "string"},
+                            "value": {"type": "string"}
+                        },
+                        "required": ["name", "value"],
+                        "additionalProperties": False
+                    }
+                }
+            },
+            "required": ["name", "price", "specifications"],
+            "additionalProperties": False
+        },
+        "strict": True
+    }
+}
+
+response = client.chat.completions.create(
+    model="deepseek-chat",
+    messages=[
+        {"role": "system", "content": "从商品描述中提取结构化信息。"},
+        {"role": "user", "content": """
+        【限时特惠】Apple iPhone 15 Pro Max 256GB
+        原价9999元，现价8999元
+        - A17 Pro芯片
+        - 钛金属边框
+        """}
+    ],
+    response_format=complex_schema
+)
+```
+
+---
+
+## 4. 结合Pydantic自动生成Schema
+
+### 4.1 从Pydantic模型生成JSON Schema
+
+```python
+from pydantic import BaseModel, Field
+from typing import List, Literal, Optional
+
+class SentimentAnalysis(BaseModel):
+    """情感分析结果"""
+    sentiment: Literal["positive", "negative", "neutral"] = Field(
+        description="情感倾向"
+    )
+    score: float = Field(ge=0, le=1, description="置信度分数")
+    keywords: List[str] = Field(description="关键情感词")
+    summary: Optional[str] = Field(default=None, description="一句话总结")
+
+# 自动生成JSON Schema
+schema = SentimentAnalysis.model_json_schema()
+print(json.dumps(schema, indent=2, ensure_ascii=False))
+```
+
+### 4.2 封装为可复用函数
+
+```python
+from pydantic import BaseModel
+from typing import TypeVar, Type
+import json
+
+T = TypeVar('T', bound=BaseModel)
+
+def structured_output(
+    client,
+    model: str,
+    messages: list,
+    response_model: Type[T],
+    strict: bool = True
+) -> T:
+    """
+    通用结构化输出函数
+    
+    Args:
+        client: OpenAI客户端
+        model: 模型名称
+        messages: 对话消息
+        response_model: Pydantic模型类
+        strict: 是否启用严格模式
+    
+    Returns:
+        解析后的Pydantic对象
+    """
+    # 获取Schema
+    schema = response_model.model_json_schema()
+    
+    # 移除Pydantic特有字段，保留OpenAI兼容格式
+    if "title" in schema:
+        del schema["title"]
+    if "$defs" in schema:
+        # 展开引用（简化处理）
+        pass
+    
+    response = client.chat.completions.create(
+        model=model,
+        messages=messages,
+        response_format={
+            "type": "json_schema",
+            "json_schema": {
+                "name": response_model.__name__.lower(),
+                "schema": schema,
+                "strict": strict
+            }
+        }
+    )
+    
+    data = json.loads(response.choices[0].message.content)
+    return response_model(**data)
+
+# 使用示例
+result = structured_output(
+    client=client,
+    model="deepseek-chat",
+    messages=[
+        {"role": "system", "content": "分析用户输入的文本情感。"},
+        {"role": "user", "content": "今天天气真好，心情愉快！"}
+    ],
+    response_model=SentimentAnalysis
+)
+
+print(f"情感: {result.sentiment}")
+print(f"分数: {result.score}")
+print(f"关键词: {result.keywords}")
+```
+
+---
+
+## 5. JSON Mode (传统方式)
+
+适用于简单场景或不支持JSON Schema的模型：
+
+```python
 response = client.chat.completions.create(
     model="deepseek-chat",
     messages=[
         {
             "role": "system", 
-            "content": "你是一个数据分析助手。请以JSON格式返回分析结果。"
+            "content": """你是一个数据分析助手。
+请以以下JSON格式返回：
+{
+    "sentiment": "positive/negative/neutral",
+    "score": 0.0-1.0,
+    "keywords": ["关键词列表"]
+}"""
         },
-        {
-            "role": "user", 
-            "content": "分析这段文本的情感：我今天很开心！"
-        }
+        {"role": "user", "content": "分析：我今天很开心！"}
     ],
-    response_format={"type": "json_object"}  # 启用JSON模式
+    response_format={"type": "json_object"}  # 传统JSON模式
 )
-
-# 解析JSON
-result = json.loads(response.choices[0].message.content)
-print(result)
 ```
 
-**输出**：
-```json
-{
-    "sentiment": "positive",
-    "confidence": 0.95,
-    "emotion": "happiness",
-    "keywords": ["开心"]
-}
-```
+> [!WARNING]
+> JSON Mode只保证返回有效JSON，不保证遵循你定义的结构！
+> **生产环境推荐使用JSON Schema + strict模式。**
 
 ---
 
-### 2.2 指定JSON结构
-
-在提示词中明确期望的格式：
-
-```python
-system_prompt = """你是一个情感分析助手。请分析用户输入的文本，并以以下JSON格式返回：
-{
-    "text": "原始文本",
-    "sentiment": "positive" 或 "negative" 或 "neutral",
-    "score": 0.0-1.0之间的数值,
-    "emotions": ["情感列表"],
-    "summary": "一句话总结"
-}
-"""
-
-response = client.chat.completions.create(
-    model="deepseek-chat",
-    messages=[
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": "虽然今天下雨了，但我还是很高兴能见到老朋友。"}
-    ],
-    response_format={"type": "json_object"}
-)
-
-result = json.loads(response.choices[0].message.content)
-print(json.dumps(result, ensure_ascii=False, indent=2))
-```
-
-**输出**：
-```json
-{
-  "text": "虽然今天下雨了，但我还是很高兴能见到老朋友。",
-  "sentiment": "positive",
-  "score": 0.85,
-  "emotions": ["happiness", "nostalgia"],
-  "summary": "尽管天气不好，但见到朋友让作者感到开心"
-}
-```
-
----
-
-## 3. 结合Pydantic验证
-
-### 3.1 定义数据模型
-
-```python
-from pydantic import BaseModel, Field
-from typing import List, Literal
-
-class SentimentAnalysis(BaseModel):
-    """情感分析结果模型"""
-    text: str = Field(..., description="原始文本")
-    sentiment: Literal["positive", "negative", "neutral"]
-    score: float = Field(..., ge=0, le=1)
-    emotions: List[str]
-    summary: str
-
-# 验证AI返回的数据
-raw_response = {
-    "text": "我今天很开心",
-    "sentiment": "positive",
-    "score": 0.95,
-    "emotions": ["happiness"],
-    "summary": "表达了积极情感"
-}
-
-# Pydantic自动验证
-analysis = SentimentAnalysis(**raw_response)
-print(analysis.sentiment)  # positive
-```
-
----
-
-### 3.2 完整工作流
-
-```python
-from config.deepseek_client import get_client
-from pydantic import BaseModel, Field
-from typing import List, Literal
-import json
-
-class SentimentAnalysis(BaseModel):
-    sentiment: Literal["positive", "negative", "neutral"]
-    score: float = Field(..., ge=0, le=1)
-    emotions: List[str]
-    summary: str
-
-def analyze_sentiment(text: str) -> SentimentAnalysis:
-    """分析文本情感，返回结构化结果"""
-    client = get_client()
-    
-    # 构建提示词（包含JSON Schema）
-    system_prompt = f"""分析用户输入的文本情感。返回JSON格式：
-{json.dumps(SentimentAnalysis.model_json_schema(), indent=2)}
-"""
-    
-    response = client.chat.completions.create(
-        model="deepseek-chat",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": text}
-        ],
-        response_format={"type": "json_object"},
-        temperature=0  # 确保一致性
-    )
-    
-    # 解析并验证
-    data = json.loads(response.choices[0].message.content)
-    return SentimentAnalysis(**data)
-
-# 使用
-result = analyze_sentiment("今天加班到很晚，真的很累。")
-print(f"情感: {result.sentiment}")
-print(f"分数: {result.score}")
-print(f"情绪: {result.emotions}")
-```
-
----
-
-## 4. 实战示例：信息提取
-
-### 从名片文本提取信息
-
-```python
-from pydantic import BaseModel, EmailStr
-from typing import Optional
-import json
-
-class ContactInfo(BaseModel):
-    """名片信息模型"""
-    name: str
-    company: Optional[str] = None
-    title: Optional[str] = None
-    phone: Optional[str] = None
-    email: Optional[str] = None
-    address: Optional[str] = None
-
-def extract_contact(text: str) -> ContactInfo:
-    """从文本中提取联系人信息"""
-    from config.deepseek_client import get_client
-    client = get_client()
-    
-    system_prompt = f"""从用户提供的名片或联系信息文本中提取结构化数据。
-返回JSON格式，字段说明：
-- name: 姓名（必填）
-- company: 公司名称
-- title: 职位
-- phone: 电话号码
-- email: 电子邮箱
-- address: 地址
-
-如果某个字段无法提取，设为null。
-"""
-    
-    response = client.chat.completions.create(
-        model="deepseek-chat",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": text}
-        ],
-        response_format={"type": "json_object"},
-        temperature=0
-    )
-    
-    data = json.loads(response.choices[0].message.content)
-    return ContactInfo(**data)
-
-# 测试
-card_text = """
-张三
-高级软件工程师
-ABC科技有限公司
-电话：13812345678
-邮箱：zhangsan@abc.com
-地址：北京市海淀区中关村大街1号
-"""
-
-contact = extract_contact(card_text)
-print(f"姓名: {contact.name}")
-print(f"公司: {contact.company}")
-print(f"电话: {contact.phone}")
-```
-
----
-
-## 5. 错误处理
-
-### 5.1 JSON解析失败
+## 6. 错误处理最佳实践
 
 ```python
 import json
 from pydantic import ValidationError
+from tenacity import retry, stop_after_attempt, wait_exponential
 
-def safe_parse_response(raw_content: str, model_class):
-    """安全解析AI响应"""
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=1, max=10)
+)
+def safe_structured_output(
+    client, model: str, messages: list, response_model
+):
+    """带重试的结构化输出"""
     try:
-        # 尝试解析JSON
-        data = json.loads(raw_content)
-        # 验证数据结构
-        return model_class(**data)
+        response = client.chat.completions.create(
+            model=model,
+            messages=messages,
+            response_format={
+                "type": "json_schema",
+                "json_schema": {
+                    "name": response_model.__name__.lower(),
+                    "schema": response_model.model_json_schema(),
+                    "strict": True
+                }
+            }
+        )
+        
+        data = json.loads(response.choices[0].message.content)
+        return response_model(**data)
+        
     except json.JSONDecodeError as e:
-        print(f"JSON解析错误: {e}")
-        return None
+        print(f"❌ JSON解析失败: {e}")
+        raise
     except ValidationError as e:
-        print(f"数据验证错误: {e}")
-        return None
+        print(f"❌ 数据验证失败: {e}")
+        raise
 
 # 使用
-result = safe_parse_response(response_content, SentimentAnalysis)
-if result:
-    print("解析成功")
-else:
-    print("解析失败，需要重试")
-```
-
-### 5.2 重试机制
-
-```python
-import time
-
-def extract_with_retry(text: str, max_retries: int = 3) -> ContactInfo:
-    """带重试的信息提取"""
-    for attempt in range(max_retries):
-        try:
-            return extract_contact(text)
-        except Exception as e:
-            print(f"尝试 {attempt + 1} 失败: {e}")
-            if attempt < max_retries - 1:
-                time.sleep(1)  # 等待1秒后重试
-    
-    raise Exception("达到最大重试次数")
+try:
+    result = safe_structured_output(client, "deepseek-chat", messages, SentimentAnalysis)
+except Exception as e:
+    print(f"最终失败: {e}")
 ```
 
 ---
 
-## 6. 实战练习
+## 7. 实战练习
 
-### 练习1：商品信息提取
-
-创建一个函数，从商品描述中提取结构化信息：
+### 练习1：发票信息提取
 
 ```python
 from pydantic import BaseModel
 from typing import List, Optional
+from datetime import date
 
-class ProductInfo(BaseModel):
-    """商品信息模型"""
-    name: str
-    price: float
-    category: str
-    features: List[str]
-    brand: Optional[str] = None
+class InvoiceItem(BaseModel):
+    """发票项目"""
+    description: str
+    quantity: int
+    unit_price: float
+    total: float
 
-# TODO: 实现extract_product函数
-def extract_product(description: str) -> ProductInfo:
-    pass
+class Invoice(BaseModel):
+    """发票信息"""
+    invoice_number: str
+    date: str
+    vendor: str
+    buyer: str
+    items: List[InvoiceItem]
+    subtotal: float
+    tax: float
+    total: float
 
-# 测试文本
-text = """
-【限时特惠】Apple iPhone 15 Pro Max 256GB 原色钛金属
-原价9999元，现价8999元
-- A17 Pro芯片
-- 钛金属边框
-- 4800万像素主摄
-- USB-C充电
-"""
-
-# product = extract_product(text)
-# print(product.model_dump_json(indent=2))
+# TODO: 实现 extract_invoice(text: str) -> Invoice
+# 使用上面的structured_output函数
 ```
 
 ---
 
-## 7. 关键要点
+## 8. 关键要点
 
 > [!IMPORTANT]
-> **结构化输出要点：**
+> **2026最佳实践：**
 > 
-> 1. 📋 **明确格式**：在提示词中清楚定义期望的JSON结构
-> 2. ✅ **启用JSON模式**：使用 `response_format={"type": "json_object"}`
-> 3. 🔒 **Pydantic验证**：用模型类验证数据完整性
-> 4. 🔄 **错误处理**：实现重试和降级机制
-> 5. 🌡️ **低温度**：使用 `temperature=0` 确保输出一致
+> 1. 🆕 **使用JSON Schema + strict模式** - 100%可靠的结构化输出
+> 2. 📋 **Pydantic自动生成Schema** - 减少手写Schema的错误
+> 3. 🔒 **additionalProperties: false** - 防止模型添加额外字段
+> 4. 🔄 **带重试的错误处理** - 使用tenacity库
+> 5. 📚 **明确的字段描述** - 帮助模型理解每个字段的含义
 
 ---
 
-## 📺 推荐B站视频
-
-| UP主 | 视频标题 | 链接 |
-|------|---------|------|
-| AI进化论 | 大模型结构化输出实战 | https://www.bilibili.com/video/BV1dZ421m7tB |
-| DataWhale | JSON Mode与结构化输出 | https://www.bilibili.com/video/BV1Sp4y1s7Pt |
-
----
-
-## 8. 继续学习
-
-学完结构化输出后，在左侧菜单选择下一个教程：
+## 继续学习
 
 📌 **Week 2 学习顺序**：
 1. ✅ DeepSeek API快速入门
 2. ✅ 结构化输出详解（本教程）
-3. ➡️ Function Calling详解
+3. ➡️ Response Format深度解析
+4. ➡️ Function Calling详解
 
 ---
 
 **结构化输出是AI应用的关键技术，让AI从"聊天"变成"做事"！💪**
-
