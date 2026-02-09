@@ -57,7 +57,7 @@
 ### Day 1：Vision模型入门
 
 #### 📖 教程材料
-- [GPT-4V/DeepSeek Vision使用](./tutorials/01_vision_basics.md) 🔜
+- [GPT-4V/DeepSeek Vision使用](./tutorials/01_vision_basics.md) ✅
 
 **学习内容**：
 - Vision API调用方法
@@ -106,7 +106,7 @@ def analyze_image(image_path: str, question: str) -> str:
 ### Day 2：图像Embedding与检索
 
 #### 📖 教程材料
-- [CLIP图像Embedding](./tutorials/02_image_embedding.md) 🔜
+- [语音处理实战](./tutorials/02_audio_processing.md) ✅
 
 **学习内容**：
 - CLIP模型原理
@@ -142,7 +142,7 @@ print(f"相似度: {similarity}")
 ### Day 3：语音处理
 
 #### 📖 教程材料
-- [Whisper语音识别](./tutorials/03_speech_processing.md) 🔜
+- [多模态RAG系统](./tutorials/03_multimodal_rag.md) ✅
 
 **学习内容**：
 - Whisper模型使用
@@ -171,7 +171,9 @@ for segment in result["segments"]:
 ### Day 4：多模态RAG
 
 #### 📖 教程材料
-- [构建多模态RAG系统](./tutorials/04_multimodal_rag.md) 🔜
+
+> [!NOTE]
+> Day 4多模态RAG内容已合并到 Day 3 教程中
 
 **学习内容**：
 - 多模态文档解析

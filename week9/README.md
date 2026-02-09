@@ -33,7 +33,7 @@
 ### Day 1：微调基础概念
 
 #### 📖 教程材料
-- [大模型微调入门](./tutorials/01_finetuning_basics.md) 🔜
+- [LoRA微调实战](./tutorials/01_lora_finetuning.md) ✅
 
 **学习内容**：
 - 预训练 vs 微调
@@ -70,7 +70,7 @@
 ### Day 2：训练数据准备
 
 #### 📖 教程材料
-- [微调数据集构建](./tutorials/02_data_preparation.md) 🔜
+- [数据集构建指南](./tutorials/02_dataset_preparation.md) ✅
 
 **学习内容**：
 - 数据格式要求
@@ -108,7 +108,7 @@ training_data = [
 ### Day 3：LoRA微调实战
 
 #### 📖 教程材料
-- [LoRA微调实战](./tutorials/03_lora_training.md) 🔜
+- [模型部署指南](./tutorials/03_model_deployment.md) ✅
 
 **学习内容**：
 - 环境配置（Transformers、PEFT）
@@ -172,7 +172,9 @@ trainer.train()
 ### Day 4：模型评估
 
 #### 📖 教程材料
-- [微调效果评估](./tutorials/04_evaluation.md) 🔜
+
+> [!NOTE]
+> 模型评估内容待补充，可参考: [Hugging Face Evaluate库](https://huggingface.co/docs/evaluate)
 
 **学习内容**：
 - 评估指标选择
@@ -193,7 +195,9 @@ trainer.train()
 ### Day 5：模型部署
 
 #### 📖 教程材料
-- [微调模型部署](./tutorials/05_deployment.md) 🔜
+
+> [!NOTE]
+> 部署内容已合并到 Day 3 教程中
 
 **学习内容**：
 - 模型合并与导出

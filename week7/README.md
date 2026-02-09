@@ -53,7 +53,7 @@
 ### Day 1：系统架构设计
 
 #### 📖 教程材料
-- [企业级系统架构设计](./tutorials/01_system_architecture.md) 🔜
+- [企业级系统架构设计](./tutorials/01_system_architecture.md) ✅
 
 **学习内容**：
 - 微服务vs单体架构选择
@@ -66,7 +66,7 @@
 ### Day 2：多格式文档处理
 
 #### 📖 教程材料
-- [文档处理Pipeline](./tutorials/02_document_processing.md) 🔜
+- [文档处理Pipeline](./tutorials/02_document_processing.md) ✅
 
 **学习内容**：
 - PDF解析（PyPDF2、pdfplumber）
@@ -107,7 +107,7 @@ class PDFProcessor(DocumentProcessor):
 ### Day 3：用户认证与权限
 
 #### 📖 教程材料
-- [JWT认证实现](./tutorials/03_authentication.md) 🔜
+- [JWT认证实现](./tutorials/03_authentication.md) ✅
 
 **学习内容**：
 - JWT Token生成与验证
@@ -148,7 +148,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 ### Day 4：缓存与性能优化
 
 #### 📖 教程材料
-- [Redis缓存策略](./tutorials/04_caching.md) 🔜
+- [Redis缓存策略](./tutorials/04_caching.md) ✅
 
 **学习内容**：
 - Redis基础操作
@@ -183,7 +183,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 ### Day 7：部署上线
 
 #### 📖 教程材料
-- [云平台部署指南](./tutorials/05_deployment.md) 🔜
+- [云平台部署指南](./tutorials/05_deployment.md) ✅
 
 **学习内容**：
 - Docker镜像优化

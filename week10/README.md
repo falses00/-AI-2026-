@@ -34,7 +34,7 @@
 ### Day 1：AI产品设计原则
 
 #### 📖 教程材料
-- [AI产品设计十大原则](./tutorials/01_design_principles.md) 🔜
+- [AI产品设计原则](./tutorials/01_design_principles.md) ✅
 
 **核心原则**：
 
@@ -62,7 +62,7 @@
 ### Day 2：对话设计
 
 #### 📖 教程材料
-- [AI对话设计最佳实践](./tutorials/02_conversation_design.md) 🔜
+- [AI对话设计最佳实践](./tutorials/02_conversation_design.md) ✅
 
 **学习内容**：
 - 对话开场设计
@@ -97,7 +97,7 @@ def handle_unclear_input(user_input: str) -> str:
 ### Day 3：错误处理与边界
 
 #### 📖 教程材料
-- [AI错误处理策略](./tutorials/03_error_handling.md) 🔜
+- [AI错误处理策略](./tutorials/03_error_handling.md) ✅
 
 **错误类型与处理**：
 
@@ -139,7 +139,11 @@ class AIResponseHandler:
 ### Day 4：用户体验优化
 
 #### 📖 教程材料
-- [AI产品UX优化](./tutorials/04_ux_optimization.md) 🔜
+
+> [!NOTE]
+> UX优化和A/B测试内容待补充，可参考:
+> - [Google PAIR - AI设计指南](https://pair.withgoogle.com/guidebook)
+> - [Microsoft AI交互设计指南](https://www.microsoft.com/design/fluent/#/)
 
 **学习内容**：
 - 响应时间优化
@@ -167,7 +171,9 @@ AI: 这是分析结果...        ├── ✅ 识别趋势
 ### Day 5：A/B测试与迭代
 
 #### 📖 教程材料
-- [AI产品A/B测试](./tutorials/05_ab_testing.md) 🔜
+
+> [!TIP]
+> 可通过Week2流式输出教程和Week11可观测性教程学习UX优化和A/B测试的实现方法
 
 **学习内容**：
 - AI产品评估指标
