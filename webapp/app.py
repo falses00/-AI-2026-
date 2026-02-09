@@ -156,6 +156,8 @@ CURRICULUM = {
             {"name": "企业级系统架构", "path": "week7/tutorials/01_system_architecture.md", "icon": "🏗️", "duration": 60},
             {"name": "多格式文档处理", "path": "week7/tutorials/02_document_processing.md", "icon": "📄", "duration": 55},
             {"name": "用户认证与权限", "path": "week7/tutorials/03_authentication.md", "icon": "🔐", "duration": 50},
+            {"name": "Redis缓存策略", "path": "week7/tutorials/04_caching.md", "icon": "⚡", "duration": 45},
+            {"name": "云平台部署指南", "path": "week7/tutorials/05_deployment.md", "icon": "☁️", "duration": 60},
         ],
         "projects": [
             {"name": "企业知识库系统", "path": "week7/README.md", "icon": "📚", "duration": 240},
@@ -173,6 +175,7 @@ CURRICULUM = {
             {"name": "Vision模型使用", "path": "week8/tutorials/01_vision_basics.md", "icon": "👁️", "duration": 55},
             {"name": "语音处理Whisper", "path": "week8/tutorials/02_audio_processing.md", "icon": "🎤", "duration": 50},
             {"name": "多模态RAG系统", "path": "week8/tutorials/03_multimodal_rag.md", "icon": "🖼️", "duration": 60},
+            {"name": "CLIP图像Embedding", "path": "week8/tutorials/04_clip_embedding.md", "icon": "🔍", "duration": 45},
         ],
         "projects": [
             {"name": "图文问答系统", "path": "week8/projects/multimodal_qa/README.md", "icon": "🤖", "duration": 180},
@@ -187,7 +190,8 @@ CURRICULUM = {
         "tutorials": [
             {"name": "LoRA微调技术", "path": "week9/tutorials/01_lora_finetuning.md", "icon": "🔧", "duration": 70},
             {"name": "微调数据集准备", "path": "week9/tutorials/02_dataset_preparation.md", "icon": "📊", "duration": 55},
-            {"name": "模型评估与部署", "path": "week9/tutorials/03_model_deployment.md", "icon": "🚀", "duration": 50},
+            {"name": "模型部署指南", "path": "week9/tutorials/03_model_deployment.md", "icon": "🚀", "duration": 50},
+            {"name": "模型评估与效果验证", "path": "week9/tutorials/04_model_evaluation.md", "icon": "📈", "duration": 60},
         ],
         "projects": [
             {"name": "行业专属模型", "path": "week9/projects/domain_finetuning/README.md", "icon": "🎯", "duration": 240},
@@ -217,7 +221,12 @@ CURRICULUM = {
         "tutorials": [
             {"name": "生产级Agent架构", "path": "week11/tutorials/01_advanced_architecture.md", "icon": "🏗️", "duration": 65},
             {"name": "Agent记忆系统", "path": "week11/tutorials/02_agent_memory.md", "icon": "💾", "duration": 55},
-            {"name": "多Agent协作", "path": "week6/tutorials/04_multi_agent.md", "icon": "👥", "duration": 60},
+            {"name": "多Agent协作", "path": "week11/tutorials/03_multi_agent_collaboration.md", "icon": "👥", "duration": 60},
+            {"name": "可观测性实战", "path": "week11/tutorials/04_observability.md", "icon": "📊", "duration": 50},
+            {"name": "Guardrails安全护栏", "path": "week11/tutorials/05_guardrails.md", "icon": "🛡️", "duration": 55},
+            {"name": "人机协作HITL", "path": "week11/tutorials/06_human_in_the_loop.md", "icon": "👤", "duration": 45},
+            {"name": "治理与审计系统", "path": "week11/tutorials/07_governance.md", "icon": "📜", "duration": 50},
+            {"name": "Kubernetes生产部署", "path": "week11/tutorials/08_kubernetes.md", "icon": "☸️", "duration": 60},
         ],
         "projects": [
             {"name": "多Agent工作流", "path": "week11/projects/multi_agent_workflow/README.md", "icon": "🔄", "duration": 200},
