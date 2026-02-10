@@ -490,6 +490,82 @@ def get_enhanced_html_template():
             flex: 1;
             padding: 32px;
             min-height: 100vh;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* 📱 移动端适配 */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .stat-card {
+                padding: 16px;
+            }
+            
+            .week-card {
+                padding: 20px;
+            }
+            
+            .glass-card {
+                padding: 20px;
+            }
+            
+            .hero-card {
+                padding: 24px;
+            }
+            
+            .hero-card h1 {
+                font-size: 1.875rem; /* text-3xl */
+                line-height: 2.25rem;
+            }
+            
+            .hero-card p {
+                font-size: 1rem;
+            }
+            
+            /* 调整统计卡片Grid间距 */
+            .grid-cols-2.gap-5 {
+                gap: 12px;
+            }
+            
+            /* 移动端菜单按钮 */
+            .mobile-menu-btn {
+                display: block !important;
+                position: fixed;
+                top: 16px;
+                right: 16px;
+                z-index: 100;
+                background: rgba(168, 85, 247, 0.8);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: white;
+                width: 44px;
+                height: 44px;
+                border-radius: 12px;
+                font-size: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            }
+        }
+        
+        /* 桌面端隐藏菜单按钮 */
+        .mobile-menu-btn {
+            display: none;
         }
         
         /* 🔍 搜索框 */
@@ -998,6 +1074,56 @@ def get_enhanced_html_template():
             </div>
         </aside>
         
+    <!-- 📱 移动端菜单按钮 -->
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+    
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <aside class="sidebar glass">
+            <div class="mb-8 flex items-center gap-3 px-2">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xl shadow-lg shadow-purple-500/30">🚀</div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-tight">AI工程师<br><span class="text-purple-400">2026训练营</span></h1>
+                </div>
+            </div>
+            
+            <div class="mb-6 relative search-wrapper">
+                <input type="text" id="search-input" class="search-box" placeholder="搜索教程、项目...">
+            </div>
+            
+            <div id="nav-container" class="space-y-6">
+                <!-- 导航内容由JS生成 -->
+            </div>
+            
+            <!-- 底部进度 -->
+            <div class="mt-auto pt-6 border-t border-white/10">
+                <div class="flex items-center gap-4 bg-white/5 p-4 rounded-xl border border-white/5">
+                    <div class="progress-ring-container transform scale-75 origin-left">
+                        <svg class="progress-ring" width="80" height="80">
+                            <circle class="progress-ring-bg" cx="40" cy="40" r="34"></circle>
+                            <circle id="progress-ring-fill" class="progress-ring-fill" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="213.6"></circle>
+                            <defs>
+                                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#a855f7" />
+                                    <stop offset="100%" stop-color="#22d3ee" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <div class="progress-text">
+                            <span id="progress-percent">0%</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-gray-400 mb-1">总体学习进度</div>
+                        <div id="completed-count" class="text-sm font-bold text-white">0 / 0 已完成</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- 遮罩层 -->
+        <div class="sidebar-overlay fixed inset-0 bg-black/60 z-40 hidden lg:hidden backdrop-blur-sm transition-opacity" onclick="toggleMobileMenu()"></div>
+        
         <!-- 主内容区 -->
         <main class="main-content">
             <div id="content-container" class="max-w-5xl mx-auto"></div>
@@ -1177,17 +1303,34 @@ def get_enhanced_html_template():
             
             for (const [weekId, week] of Object.entries(curriculum)) {
                 const weekNum = weekId.replace('week', '');
+                // 检查是否应该展开
+                const isExpanded = localStorage.getItem(`week_expanded_${weekId}`) === 'true';
+                const displayStyle = isExpanded ? 'block' : 'none';
+                const arrowTransform = isExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
+                
                 html += `
-                    <div class="mb-5">
-                        <div class="flex items-center gap-2 mb-2 flex-wrap">
-                            <span class="week-badge text-white" style="background: ${week.color}">${weekId.toUpperCase()}</span>
-                            <span class="phase-tag">${week.phase || ''}</span>
+                    <div class="mb-2 border border-white/5 rounded-xl overflow-hidden bg-white/5">
+                        <div class="flex items-center justify-between p-3 cursor-pointer hover:bg-white/5 transition-colors" 
+                             onclick="toggleWeek('${weekId}')">
+                            <div class="flex items-center gap-3">
+                                <div class="text-xl">${week.icon}</div>
+                                <div>
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="text-sm font-bold text-gray-200">${week.title}</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="week-badge text-[10px] py-0.5 px-1.5" style="background: ${week.color}">${weekNum}</span>
+                                        <span class="text-[10px] text-gray-400">${week.tutorials.length + week.projects.length} 任务</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <svg id="week-arrow-${weekId}" class="w-4 h-4 text-gray-400 transition-transform duration-300" style="transform: ${arrowTransform}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
                         </div>
-                        <div class="text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
-                            <span>${week.icon}</span>
-                            <span>${week.title}</span>
-                        </div>
-                        <div class="space-y-1 pl-1">
+                        
+                        <div id="week-content-${weekId}" style="display: ${displayStyle}" class="border-t border-white/5 bg-black/20">
+                            <div class="space-y-1 p-2">
                 `;
                 
                 // 教程
@@ -1195,10 +1338,9 @@ def get_enhanced_html_template():
                     const completed = ProgressManager.isCompleted(item.path) ? 'completed' : '';
                     html += `
                         <div class="nav-item glass-hover text-gray-300 text-sm ${completed}" 
-                             data-path="${item.path}" onclick="loadContent('${item.path}')">
+                             data-path="${item.path}" onclick="event.stopPropagation(); loadContent('${item.path}')">
                             <span>${item.icon}</span>
                             <span class="flex-1 truncate">${item.name}</span>
-                            ${item.duration ? '<span class="text-xs text-gray-500">' + item.duration + 'min</span>' : ''}
                         </div>
                     `;
                 }
@@ -1208,7 +1350,7 @@ def get_enhanced_html_template():
                     const completed = ProgressManager.isCompleted(item.path) ? 'completed' : '';
                     html += `
                         <div class="nav-item glass-hover text-green-400 text-sm ${completed}" 
-                             data-path="${item.path}" onclick="loadContent('${item.path}')">
+                             data-path="${item.path}" onclick="event.stopPropagation(); loadContent('${item.path}')">
                             <span>${item.icon}</span>
                             <span class="flex-1 truncate">${item.name}</span>
                             <span class="text-xs bg-green-500/20 px-2 py-0.5 rounded">项目</span>
@@ -1221,7 +1363,7 @@ def get_enhanced_html_template():
                     const completed = ProgressManager.isCompleted(item.path) ? 'completed' : '';
                     html += `
                         <div class="nav-item glass-hover text-yellow-400 text-sm ${completed}" 
-                             data-path="${item.path}" onclick="loadContent('${item.path}')">
+                             data-path="${item.path}" onclick="event.stopPropagation(); loadContent('${item.path}')">
                             <span>${item.icon}</span>
                             <span class="flex-1 truncate">${item.name}</span>
                             <span class="text-xs bg-yellow-500/20 px-2 py-0.5 rounded">练习</span>
@@ -1229,7 +1371,7 @@ def get_enhanced_html_template():
                     `;
                 }
                 
-                html += '</div></div>';
+                html += '</div></div></div>';
             }
             
             container.innerHTML = html;
@@ -1292,7 +1434,7 @@ def get_enhanced_html_template():
                     </div>
                     
                     <!-- 周卡片网格 -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 mb-10">
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 mb-10 pb-10">
                         ${Object.entries(curriculum).map(([id, week], index) => `
                             <div class="week-card neon-border" onclick="scrollToWeek('${id}')" style="animation-delay: ${index * 50}ms">
                                 <div class="flex items-center gap-4 mb-4">
@@ -1426,11 +1568,35 @@ def get_enhanced_html_template():
         }
         
         function scrollToWeek(weekId) {
+            // 展开对应的周
+            toggleWeek(weekId, true);
+            
             const week = curriculum[weekId];
             if (week && week.tutorials.length > 0) {
                 loadContent(week.tutorials[0].path);
             } else if (week && week.projects.length > 0) {
                 loadContent(week.projects[0].path);
+            }
+        }
+        
+        // 切换周折叠状态
+        function toggleWeek(weekId, forceOpen = false) {
+            const content = document.getElementById(`week-content-${weekId}`);
+            const arrow = document.getElementById(`week-arrow-${weekId}`);
+            
+            if (!content) return;
+            
+            const isClosed = content.style.display === 'none';
+            
+            if (forceOpen || isClosed) {
+                content.style.display = 'block';
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
+                // 保存状态
+                localStorage.setItem(`week_expanded_${weekId}`, 'true');
+            } else {
+                content.style.display = 'none';
+                if (arrow) arrow.style.transform = 'rotate(0deg)';
+                localStorage.removeItem(`week_expanded_${weekId}`);
             }
         }
         
