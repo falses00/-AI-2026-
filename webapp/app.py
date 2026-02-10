@@ -490,82 +490,6 @@ def get_enhanced_html_template():
             flex: 1;
             padding: 32px;
             min-height: 100vh;
-            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        /* 📱 移动端适配 */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
-            }
-            
-            .sidebar.active {
-                transform: translateX(0);
-            }
-            
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-            }
-            
-            .stat-card {
-                padding: 16px;
-            }
-            
-            .week-card {
-                padding: 20px;
-            }
-            
-            .glass-card {
-                padding: 20px;
-            }
-            
-            .hero-card {
-                padding: 24px;
-            }
-            
-            .hero-card h1 {
-                font-size: 1.875rem; /* text-3xl */
-                line-height: 2.25rem;
-            }
-            
-            .hero-card p {
-                font-size: 1rem;
-            }
-            
-            /* 调整统计卡片Grid间距 */
-            .grid-cols-2.gap-5 {
-                gap: 12px;
-            }
-            
-            /* 移动端菜单按钮 */
-            .mobile-menu-btn {
-                display: block !important;
-                position: fixed;
-                top: 16px;
-                right: 16px;
-                z-index: 100;
-                background: rgba(168, 85, 247, 0.8);
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                color: white;
-                width: 44px;
-                height: 44px;
-                border-radius: 12px;
-                font-size: 24px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            }
-        }
-        
-        /* 桌面端隐藏菜单按钮 */
-        .mobile-menu-btn {
-            display: none;
         }
         
         /* 🔍 搜索框 */
@@ -923,11 +847,30 @@ def get_enhanced_html_template():
                 width: 100%;
                 height: 100%;
                 left: 0;
+                top: 0;
                 background: rgba(3, 0, 20, 0.98);
+                backdrop-filter: blur(20px);
             }
             .sidebar.active { display: flex; }
             .main-content { margin-left: 0; padding: 16px; }
             .mobile-menu-btn { display: flex !important; }
+            
+            .hero-card {
+                padding: 24px;
+            }
+            .hero-card h1 {
+                font-size: 1.75rem;
+                line-height: 2.2rem;
+            }
+            .hero-card p {
+                font-size: 0.95rem;
+            }
+            .stat-card {
+                padding: 16px;
+            }
+            .week-card {
+                padding: 20px;
+            }
         }
         
         .mobile-menu-btn {
@@ -1073,56 +1016,6 @@ def get_enhanced_html_template():
                 </a>
             </div>
         </aside>
-        
-    <!-- 📱 移动端菜单按钮 -->
-    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
-    
-    <div class="app-container">
-        <!-- 侧边栏 -->
-        <aside class="sidebar glass">
-            <div class="mb-8 flex items-center gap-3 px-2">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xl shadow-lg shadow-purple-500/30">🚀</div>
-                <div>
-                    <h1 class="font-bold text-lg tracking-tight">AI工程师<br><span class="text-purple-400">2026训练营</span></h1>
-                </div>
-            </div>
-            
-            <div class="mb-6 relative search-wrapper">
-                <input type="text" id="search-input" class="search-box" placeholder="搜索教程、项目...">
-            </div>
-            
-            <div id="nav-container" class="space-y-6">
-                <!-- 导航内容由JS生成 -->
-            </div>
-            
-            <!-- 底部进度 -->
-            <div class="mt-auto pt-6 border-t border-white/10">
-                <div class="flex items-center gap-4 bg-white/5 p-4 rounded-xl border border-white/5">
-                    <div class="progress-ring-container transform scale-75 origin-left">
-                        <svg class="progress-ring" width="80" height="80">
-                            <circle class="progress-ring-bg" cx="40" cy="40" r="34"></circle>
-                            <circle id="progress-ring-fill" class="progress-ring-fill" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="213.6"></circle>
-                            <defs>
-                                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stop-color="#a855f7" />
-                                    <stop offset="100%" stop-color="#22d3ee" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                        <div class="progress-text">
-                            <span id="progress-percent">0%</span>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="text-xs text-gray-400 mb-1">总体学习进度</div>
-                        <div id="completed-count" class="text-sm font-bold text-white">0 / 0 已完成</div>
-                    </div>
-                </div>
-            </div>
-        </aside>
-        
-        <!-- 遮罩层 -->
-        <div class="sidebar-overlay fixed inset-0 bg-black/60 z-40 hidden lg:hidden backdrop-blur-sm transition-opacity" onclick="toggleMobileMenu()"></div>
         
         <!-- 主内容区 -->
         <main class="main-content">
