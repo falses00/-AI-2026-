@@ -980,6 +980,200 @@ def get_enhanced_html_template():
             transform: translateY(-2px);
             box-shadow: 0 4px 20px rgba(52, 211, 153, 0.2);
         }
+        /* 🧪 代码运行器 */
+        .code-runner {
+            margin: 16px 0;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            background: rgba(0, 0, 0, 0.4);
+        }
+        .code-runner-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 14px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.12), rgba(244, 114, 182, 0.06));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .code-runner-header .lang-tag {
+            font-size: 11px;
+            color: #c084fc;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .code-runner-actions {
+            display: flex;
+            gap: 6px;
+        }
+        .run-btn, .reset-btn {
+            padding: 5px 14px;
+            border-radius: 8px;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .run-btn {
+            background: linear-gradient(135deg, #a855f7, #8b5cf6);
+            color: white;
+            box-shadow: 0 2px 10px rgba(168, 85, 247, 0.3);
+        }
+        .run-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(168, 85, 247, 0.45);
+        }
+        .run-btn.running {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        .run-btn.running::after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            border: 2px solid white;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .reset-btn {
+            background: rgba(255, 255, 255, 0.06);
+            color: #9ca3af;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .reset-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .code-editor-area {
+            position: relative;
+        }
+        .code-editor-area textarea {
+            width: 100%;
+            min-height: 120px;
+            max-height: 400px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #e2e8f0;
+            border: none;
+            outline: none;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            resize: vertical;
+            tab-size: 4;
+        }
+        .code-output {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.6);
+            min-height: 40px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .code-output-label {
+            font-size: 10px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+        .code-output pre {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 12px;
+            line-height: 1.5;
+            color: #34d399;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin: 0;
+        }
+        .code-output pre.error {
+            color: #f87171;
+        }
+        .code-output .loading-msg {
+            color: #c084fc;
+            font-style: italic;
+            font-size: 12px;
+        }
+        
+        /* 🖥️ Playground */
+        .playground-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .playground-editor {
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(168, 85, 247, 0.25);
+            background: rgba(0, 0, 0, 0.35);
+        }
+        .playground-editor textarea {
+            width: 100%;
+            min-height: 280px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #e2e8f0;
+            border: none;
+            outline: none;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: vertical;
+            tab-size: 4;
+        }
+        .playground-output {
+            margin-top: 16px;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            min-height: 80px;
+        }
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .template-btn {
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            color: #d1d5db;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: left;
+        }
+        .template-btn:hover {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: rgba(168, 85, 247, 0.3);
+            color: white;
+            transform: translateY(-1px);
+        }
+        .template-btn .tpl-icon {
+            font-size: 16px;
+            margin-bottom: 4px;
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .template-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .playground-editor textarea {
+                min-height: 200px;
+                font-size: 13px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1044,6 +1238,12 @@ def get_enhanced_html_template():
             <button class="home-btn mb-5 w-full justify-center" onclick="goHome()">
                 <span>🏠</span>
                 <span>返回首页概览</span>
+            </button>
+            
+            <!-- 🧪 代码实验室 -->
+            <button class="home-btn mb-3 w-full justify-center" onclick="openPlayground()" style="background: linear-gradient(135deg, rgba(34,211,238,0.1), rgba(168,85,247,0.1)); border-color: rgba(34,211,238,0.2);">
+                <span>🧪</span>
+                <span>代码实验室</span>
             </button>
             
             <!-- 导航菜单 -->
@@ -1618,6 +1818,260 @@ def get_enhanced_html_template():
                 }
             }
         });
+        
+        // ============================================================
+        // 🧪 Pyodide 代码运行器 (Developer Agent)
+        // ============================================================
+        
+        const PyodideManager = {
+            instance: null,
+            loading: false,
+            loadPromise: null,
+            
+            async init() {
+                if (this.instance) return this.instance;
+                if (this.loadPromise) return this.loadPromise;
+                
+                this.loading = true;
+                this.loadPromise = new Promise(async (resolve, reject) => {
+                    try {
+                        // 动态加载 Pyodide CDN
+                        if (!window.loadPyodide) {
+                            const script = document.createElement('script');
+                            script.src = 'https://cdn.jsdelivr.net/pyodide/v0.27.0/full/pyodide.js';
+                            script.onload = async () => {
+                                this.instance = await loadPyodide({
+                                    indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.27.0/full/'
+                                });
+                                this.loading = false;
+                                resolve(this.instance);
+                            };
+                            script.onerror = () => {
+                                this.loading = false;
+                                reject(new Error('Pyodide CDN 加载失败'));
+                            };
+                            document.head.appendChild(script);
+                        } else {
+                            this.instance = await loadPyodide({
+                                indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.27.0/full/'
+                            });
+                            this.loading = false;
+                            resolve(this.instance);
+                        }
+                    } catch (e) {
+                        this.loading = false;
+                        reject(e);
+                    }
+                });
+                return this.loadPromise;
+            },
+            
+            async runCode(code, outputEl) {
+                outputEl.innerHTML = '<span class="loading-msg">⚙️ 初始化 Python 环境...</span>';
+                
+                try {
+                    const pyodide = await this.init();
+                    outputEl.innerHTML = '<span class="loading-msg">📦 检测并加载依赖包...</span>';
+                    
+                    // 自动检测并加载包
+                    try {
+                        await pyodide.loadPackagesFromImports(code);
+                    } catch(e) { /* 忽略包加载错误 */ }
+                    
+                    outputEl.innerHTML = '<span class="loading-msg">▶ 执行中...</span>';
+                    
+                    // 捕获 stdout/stderr
+                    let stdout = [];
+                    let stderr = [];
+                    pyodide.setStdout({ batched: (msg) => stdout.push(msg) });
+                    pyodide.setStderr({ batched: (msg) => stderr.push(msg) });
+                    
+                    // 执行代码
+                    let result;
+                    try {
+                        result = await pyodide.runPythonAsync(code);
+                    } catch (pyErr) {
+                        stderr.push(pyErr.message);
+                    }
+                    
+                    // 显示输出
+                    let output = '';
+                    if (stdout.length > 0) {
+                        output += stdout.join('\n');
+                    }
+                    if (result !== undefined && result !== null && result.toString() !== 'undefined') {
+                        if (output) output += '\n';
+                        output += '>>> ' + result.toString();
+                    }
+                    if (stderr.length > 0) {
+                        outputEl.innerHTML = `<pre class="error">${stderr.join('\n')}</pre>` + 
+                            (output ? `<pre>${output}</pre>` : '');
+                    } else if (output) {
+                        outputEl.innerHTML = `<pre>${output}</pre>`;
+                    } else {
+                        outputEl.innerHTML = '<pre style="color:#6b7280;">✓ 执行完成（无输出）</pre>';
+                    }
+                } catch (e) {
+                    outputEl.innerHTML = `<pre class="error">❌ ${e.message}</pre>`;
+                }
+            }
+        };
+        
+        // 代码模板库
+        const CODE_TEMPLATES = [
+            { name: 'Hello World', icon: '👋', code: 'print("Hello, AI 工程师!")\nprint("欢迎来到 2026 训练营")' },
+            { name: '列表推导式', icon: '📝', code: '# 列表推导式\nsquares = [x**2 for x in range(10)]\nprint(f"平方数: {squares}")\n\n# 带条件\nevens = [x for x in range(20) if x % 2 == 0]\nprint(f"偶数: {evens}")' },
+            { name: '字典操作', icon: '📖', code: '# 字典推导式\nstudent = {"name": "小明", "age": 22, "课程": ["AI", "Python"]}\n\nfor key, value in student.items():\n    print(f"{key}: {value}")\n\n# 字典合并\nscores = {**student, "成绩": 95}\nprint(f"\n完整信息: {scores}")' },
+            { name: 'NumPy 基础', icon: '📊', code: 'import numpy as np\n\narr = np.array([1, 2, 3, 4, 5])\nprint(f"数组: {arr}")\nprint(f"均值: {arr.mean()}")\nprint(f"标准差: {arr.std():.2f}")\n\nmatrix = np.random.rand(3, 3)\nprint(f"\n随机矩阵:\n{matrix.round(2)}")' },
+            { name: '异步基础', icon: '⚡', code: 'import asyncio\n\nasync def greet(name, delay):\n    await asyncio.sleep(delay)\n    return f"Hello, {name}!"\n\nasync def main():\n    results = await asyncio.gather(\n        greet("AI", 0.1),\n        greet("Python", 0.2),\n        greet("世界", 0.15)\n    )\n    for r in results:\n        print(r)\n\nawait main()' },
+            { name: '数据处理', icon: '🔧', code: '# JSON 数据处理\nimport json\n\ndata = {\n    "users": [\n        {"name": "Alice", "score": 95},\n        {"name": "Bob", "score": 87},\n        {"name": "Charlie", "score": 92}\n    ]\n}\n\n# 排序和过滤\ntop = sorted(data["users"], key=lambda x: x["score"], reverse=True)\nprint("排名:")\nfor i, u in enumerate(top, 1):\n    print(f"  {i}. {u[\"name\"]} - {u[\"score\"]}分")' },
+            { name: '装饰器', icon: '🎭', code: 'import functools\nimport time\n\ndef timer(func):\n    @functools.wraps(func)\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        elapsed = time.time() - start\n        print(f"{func.__name__} 耗时: {elapsed:.4f}s")\n        return result\n    return wrapper\n\n@timer\ndef compute():\n    return sum(i**2 for i in range(100000))\n\nresult = compute()\nprint(f"结果: {result}")' },
+            { name: '类与继承', icon: '🏛️', code: 'from dataclasses import dataclass\n\n@dataclass\nclass Agent:\n    name: str\n    role: str\n    skills: list\n    \n    def introduce(self):\n        return f"I am {self.name}, a {self.role}"\n\nclass AIAgent(Agent):\n    def think(self, task):\n        return f"{self.name} is analyzing: {task}"\n\nagent = AIAgent("Atlas", "Engineer", ["Python", "ML"])\nprint(agent.introduce())\nprint(agent.think("设计系统架构"))\nprint(f"技能: {\", \".join(agent.skills)}")' }
+        ];
+        
+        // 渲染 Playground 页面
+        function renderPlayground() {
+            const container = document.getElementById('content-container');
+            container.innerHTML = `
+                <div class="playground-container animate-slide-in">
+                    <div class="glass-card p-8 mb-6">
+                        <h1 class="text-2xl font-bold gradient-text mb-2">🧪 代码实验室</h1>
+                        <p class="text-gray-400 text-sm">直接在浏览器中运行 Python 代码，无需安装任何环境 • 基于 Pyodide (WebAssembly)</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 mb-6">
+                        <h3 class="text-sm font-semibold text-gray-300 mb-3">📌 快速模板</h3>
+                        <div class="template-grid">
+                            ${CODE_TEMPLATES.map((t, i) => `
+                                <button class="template-btn" onclick="loadTemplate(${i})">
+                                    <span class="tpl-icon">${t.icon}</span>
+                                    ${t.name}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="playground-editor">
+                        <div class="code-runner-header">
+                            <span class="lang-tag">🐍 Python</span>
+                            <div class="code-runner-actions">
+                                <button class="reset-btn" onclick="document.getElementById('pg-editor').value = '# 在这里输入你的 Python 代码...\\nprint(\'Hello World!\')'">↺ 重置</button>
+                                <button class="run-btn" id="pg-run-btn" onclick="runPlayground()">▶ 运行</button>
+                            </div>
+                        </div>
+                        <textarea id="pg-editor" spellcheck="false" placeholder="# 在这里输入你的 Python 代码...\nprint('Hello World!')">print("Hello, AI 工程师! 🚀")\nprint("欢迎来到 2026 训练营代码实验室")</textarea>
+                    </div>
+                    
+                    <div class="playground-output">
+                        <div class="code-output-label">💻 输出</div>
+                        <div id="pg-output"><pre style="color:#6b7280;">点击 ▶ 运行 按钮执行代码</pre></div>
+                    </div>
+                </div>
+            `;
+            
+            currentPath = null;
+            // Tab键支持
+            const editor = document.getElementById('pg-editor');
+            editor.addEventListener('keydown', handleTabKey);
+        }
+        
+        function loadTemplate(index) {
+            const editor = document.getElementById('pg-editor');
+            if (editor) {
+                editor.value = CODE_TEMPLATES[index].code;
+            }
+        }
+        
+        async function runPlayground() {
+            const code = document.getElementById('pg-editor').value;
+            const outputEl = document.getElementById('pg-output');
+            const btn = document.getElementById('pg-run-btn');
+            btn.classList.add('running');
+            btn.innerHTML = '运行中';
+            await PyodideManager.runCode(code, outputEl);
+            btn.classList.remove('running');
+            btn.innerHTML = '▶ 运行';
+        }
+        
+        function openPlayground() {
+            renderPlayground();
+            // 关闭侧边栏
+            const sidebar = document.querySelector('.sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            const toggleBtn = document.getElementById('sidebar-toggle');
+            if (sidebar) sidebar.classList.remove('open');
+            if (backdrop) backdrop.classList.remove('visible');
+            if (toggleBtn) toggleBtn.classList.remove('active');
+            window.scrollTo(0, 0);
+        }
+        
+        // Tab键处理
+        function handleTabKey(e) {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = e.target.selectionStart;
+                const end = e.target.selectionEnd;
+                e.target.value = e.target.value.substring(0, start) + '    ' + e.target.value.substring(end);
+                e.target.selectionStart = e.target.selectionEnd = start + 4;
+            }
+        }
+        
+        // 增强教程中的 Python 代码块
+        function enhanceCodeBlocks(container) {
+            const codeBlocks = container.querySelectorAll('pre code.language-python, pre code.hljs.language-python');
+            let blockId = 0;
+            
+            codeBlocks.forEach(codeEl => {
+                const pre = codeEl.parentElement;
+                const originalCode = codeEl.textContent;
+                const id = 'cr-' + (blockId++);
+                
+                const runner = document.createElement('div');
+                runner.className = 'code-runner';
+                runner.innerHTML = `
+                    <div class="code-runner-header">
+                        <span class="lang-tag">🐍 Python · 可运行</span>
+                        <div class="code-runner-actions">
+                            <button class="reset-btn" onclick="document.getElementById('${id}').value = decodeURIComponent(this.dataset.original)" data-original="${encodeURIComponent(originalCode)}">↺ 重置</button>
+                            <button class="run-btn" onclick="runInlineCode('${id}', this)">▶ 运行</button>
+                        </div>
+                    </div>
+                    <div class="code-editor-area">
+                        <textarea id="${id}" spellcheck="false">${originalCode}</textarea>
+                    </div>
+                    <div class="code-output" id="${id}-output">
+                        <div class="code-output-label">输出</div>
+                        <pre style="color:#6b7280;">点击 ▶ 运行</pre>
+                    </div>
+                `;
+                
+                pre.replaceWith(runner);
+                
+                // Tab键支持
+                document.getElementById(id).addEventListener('keydown', handleTabKey);
+            });
+        }
+        
+        async function runInlineCode(id, btn) {
+            const code = document.getElementById(id).value;
+            const outputEl = document.getElementById(id + '-output');
+            btn.classList.add('running');
+            btn.textContent = '运行中';
+            await PyodideManager.runCode(code, outputEl);
+            btn.classList.remove('running');
+            btn.innerHTML = '▶ 运行';
+        }
+        
+        // 劫持 loadContent 添加代码块增强
+        const _origLoadContent2 = loadContent;
+        loadContent = async function(path) {
+            await _origLoadContent2(path);
+            // 增强 Python 代码块
+            const container = document.getElementById('content-container');
+            if (container) {
+                enhanceCodeBlocks(container);
+            }
+        };
         
         // 启动应用
         init();
