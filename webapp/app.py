@@ -482,14 +482,81 @@ def get_enhanced_html_template():
             display: flex;
             flex-direction: column;
             padding: 24px;
-            z-index: 50;
+            padding-top: 72px;
+            z-index: 60;
+            transform: translateX(-100%);
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .sidebar.open {
+            transform: translateX(0);
         }
         
         .main-content {
-            margin-left: 320px;
+            margin-left: 0;
             flex: 1;
             padding: 32px;
+            padding-top: 72px;
             min-height: 100vh;
+        }
+        
+        /* 侧边栏遮罩 */
+        .sidebar-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 55;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .sidebar-backdrop.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        /* 🔀 侧边栏切换按钮 */
+        .sidebar-toggle {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 70;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.85), rgba(244, 114, 182, 0.75));
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.35);
+        }
+        .sidebar-toggle:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 28px rgba(168, 85, 247, 0.5);
+        }
+        .sidebar-toggle .icon-open,
+        .sidebar-toggle .icon-close {
+            position: absolute;
+            transition: opacity 0.25s, transform 0.25s;
+        }
+        .sidebar-toggle .icon-close {
+            opacity: 0;
+            transform: rotate(-90deg);
+        }
+        .sidebar-toggle.active .icon-open {
+            opacity: 0;
+            transform: rotate(90deg);
+        }
+        .sidebar-toggle.active .icon-close {
+            opacity: 1;
+            transform: rotate(0deg);
         }
         
         /* 🔍 搜索框 */
@@ -833,28 +900,17 @@ def get_enhanced_html_template():
             box-shadow: 0 4px 20px rgba(168, 85, 247, 0.2);
         }
         
-        /* 📱 响应式 */
-        @media (max-width: 1024px) {
-            .sidebar { width: 280px; }
-            .main-content { margin-left: 280px; padding: 24px; }
-        }
-        
+        /* 📱 响应式适配 */
         @media (max-width: 768px) {
-            .sidebar { 
-                display: none;
-                position: fixed;
-                z-index: 100;
+            .sidebar {
                 width: 100%;
-                height: 100%;
-                left: 0;
-                top: 0;
-                background: rgba(3, 0, 20, 0.98);
-                backdrop-filter: blur(20px);
+                padding: 20px;
+                padding-top: 72px;
             }
-            .sidebar.active { display: flex; }
-            .main-content { margin-left: 0; padding: 16px; }
-            .mobile-menu-btn { display: flex !important; }
-            
+            .main-content {
+                padding: 16px;
+                padding-top: 68px;
+            }
             .hero-card {
                 padding: 24px;
             }
@@ -873,28 +929,10 @@ def get_enhanced_html_template():
             }
         }
         
-        .mobile-menu-btn {
-            display: none;
-            position: fixed;
-            top: 16px;
-            left: 16px;
-            z-index: 101;
-            width: 50px;
-            height: 50px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.9), rgba(244, 114, 182, 0.8));
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: white;
-            font-size: 1.4rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
-        }
-        .mobile-menu-btn:hover {
-            transform: scale(1.05);
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .sidebar {
+                width: 300px;
+            }
         }
         
         /* 🎉 Hero区域特效 */
@@ -961,10 +999,14 @@ def get_enhanced_html_template():
         </defs>
     </svg>
     
-    <!-- 移动端菜单按钮 -->
-    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="打开菜单">
-        ☰
+    <!-- 🔀 侧边栏切换按钮 -->
+    <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()" aria-label="切换侧边栏">
+        <span class="icon-open">☰</span>
+        <span class="icon-close">✕</span>
     </button>
+    
+    <!-- 侧边栏遮罩层 -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleSidebar()"></div>
     
     <div class="app-container">
         <!-- 侧边栏 -->
@@ -1431,6 +1473,48 @@ def get_enhanced_html_template():
                     });
                 }
                 
+                // 👉 添加“下一步”导航
+                const currentIndex = allItems.findIndex(item => item.path === path);
+                const prevItem = currentIndex > 0 ? allItems[currentIndex - 1] : null;
+                const nextItem = currentIndex >= 0 && currentIndex < allItems.length - 1 ? allItems[currentIndex + 1] : null;
+                
+                let navHtml = '<div style="margin-top: 40px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">';
+                
+                if (prevItem) {
+                    navHtml += `
+                        <button onclick="loadContent('${prevItem.path}')" 
+                            style="flex: 1; min-width: 200px; display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); cursor: pointer; color: white; text-align: left; transition: all 0.3s ease;" 
+                            onmouseover="this.style.background='rgba(168,85,247,0.1)'; this.style.borderColor='rgba(168,85,247,0.3)'; this.style.transform='translateY(-2px)';" 
+                            onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.borderColor='rgba(255,255,255,0.08)'; this.style.transform='translateY(0)';">
+                            <span style="font-size: 20px;">⬅</span>
+                            <div>
+                                <div style="font-size: 11px; color: #9ca3af; margin-bottom: 4px;">上一节</div>
+                                <div style="font-size: 14px; font-weight: 600;">${prevItem.icon} ${prevItem.name}</div>
+                            </div>
+                        </button>
+                    `;
+                } else {
+                    navHtml += '<div></div>';
+                }
+                
+                if (nextItem) {
+                    navHtml += `
+                        <button onclick="loadContent('${nextItem.path}')" 
+                            style="flex: 1; min-width: 200px; display: flex; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 20px; border-radius: 14px; border: 1px solid rgba(168,85,247,0.2); background: linear-gradient(135deg, rgba(168,85,247,0.08), rgba(244,114,182,0.05)); cursor: pointer; color: white; text-align: right; transition: all 0.3s ease;" 
+                            onmouseover="this.style.background='linear-gradient(135deg, rgba(168,85,247,0.18), rgba(244,114,182,0.12))'; this.style.borderColor='rgba(168,85,247,0.4)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 20px rgba(168,85,247,0.2)';" 
+                            onmouseout="this.style.background='linear-gradient(135deg, rgba(168,85,247,0.08), rgba(244,114,182,0.05))'; this.style.borderColor='rgba(168,85,247,0.2)'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                            <div>
+                                <div style="font-size: 11px; color: #c084fc; margin-bottom: 4px;">下一步 →</div>
+                                <div style="font-size: 14px; font-weight: 600;">${nextItem.icon} ${nextItem.name}</div>
+                            </div>
+                            <span style="font-size: 20px;">➡</span>
+                        </button>
+                    `;
+                }
+                
+                navHtml += '</div>';
+                container.innerHTML += navHtml;
+                
                 currentPath = path;
                 ProgressManager.setLastVisited(path);
                 window.scrollTo(0, 0);
@@ -1492,6 +1576,48 @@ def get_enhanced_html_template():
                 localStorage.removeItem(`week_expanded_${weekId}`);
             }
         }
+        
+        // 🔀 侧边栏切换
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            const toggleBtn = document.getElementById('sidebar-toggle');
+            
+            const isOpen = sidebar.classList.contains('open');
+            
+            if (isOpen) {
+                sidebar.classList.remove('open');
+                backdrop.classList.remove('visible');
+                toggleBtn.classList.remove('active');
+            } else {
+                sidebar.classList.add('open');
+                backdrop.classList.add('visible');
+                toggleBtn.classList.add('active');
+            }
+        }
+        
+        // 点击导航项后自动关闭侧边栏
+        const origLoadContent = loadContent;
+        loadContent = async function(path) {
+            await origLoadContent(path);
+            // 自动关闭侧边栏
+            const sidebar = document.querySelector('.sidebar');
+            const backdrop = document.getElementById('sidebar-backdrop');
+            const toggleBtn = document.getElementById('sidebar-toggle');
+            if (sidebar) sidebar.classList.remove('open');
+            if (backdrop) backdrop.classList.remove('visible');
+            if (toggleBtn) toggleBtn.classList.remove('active');
+        };
+        
+        // ESC键关闭侧边栏
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const sidebar = document.querySelector('.sidebar');
+                if (sidebar && sidebar.classList.contains('open')) {
+                    toggleSidebar();
+                }
+            }
+        });
         
         // 启动应用
         init();
